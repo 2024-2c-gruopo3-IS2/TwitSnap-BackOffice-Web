@@ -1,0 +1,90 @@
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Ocupa toda la altura de la ventana */
+    background-color: #121212; /* Color de fondo oscuro */
+}
+
+.signup-box {
+    background-color: #1e1e1e; /* Fondo gris oscuro */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Sombra más pronunciada */
+    padding: 20px; /* Espaciado interno */
+    width: 400px; /* Ancho fijo */
+    min-width: 500px;;
+    text-align: center; /* Centrar texto */
+}
+
+.logo {
+    width: 80%; /* Ajusta el tamaño del logo */
+    margin-bottom: 20px; /* Espaciado inferior */
+}
+
+.form-group {
+    margin-bottom: 15px; /* Espaciado inferior entre campos */
+    text-align: left; /* Alinear texto a la izquierda */
+}
+
+.input-field {
+    width: 100%; /* Ancho completo */
+    padding: 10px; /* Espaciado interno */
+    border: 1px solid #444; /* Borde gris más claro */
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 16px; /* Tamaño de fuente */
+    background-color: #333; /* Fondo de entrada oscuro */
+    color: #fff; /* Color de texto blanco */
+}
+
+.input-field::placeholder {
+    color: #aaa; /* Color del texto del placeholder */
+}
+
+.password-container {
+    display: flex;
+    align-items: center; /* Centrar verticalmente */
+}
+
+.password-visibility-button {
+    background: none; /* Sin fondo */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cambia el cursor al pasar el mouse */
+}
+
+.submit-button {
+    width: 100%; /* Ancho completo */
+    padding: 10px; /* Espaciado interno */
+    background-color: #007BFF; /* Color de fondo del botón */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 16px; /* Tamaño de fuente */
+    cursor: pointer; /* Cambia el cursor al pasar el mouse */
+    transition: background-color 0.3s; /* Efecto de transición */
+}
+
+.submit-button:hover {
+    background-color: #0056b3; /* Color de fondo al pasar el mouse */
+}
+
+.separator {
+    margin: 20px 0; /* Espaciado superior e inferior */
+    border: 0; /* Sin borde */
+    height: 1px; /* Alto del separador */
+    background-color: #444; /* Color del separador */
+}
+
+.extra-links {
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+}
+
+.login-link {
+    color: #007BFF; /* Color del enlace */
+    text-decoration: none; /* Sin subrayado */
+    margin-left: 5px; /* Espaciado a la izquierda */
+}
+
+.login-link:hover {
+    text-decoration: underline; /* Subrayar al pasar el mouse */
+}
