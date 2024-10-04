@@ -1,27 +1,47 @@
-import React, { useState } from 'react'; // Importa useState
-import { Link } from 'react-router-dom'; // Importa Link para navegación
+// src/components/SignUp.js
+
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { signUp } from '../handlers/SignUpHandler'; // Importa la función signup
 import '../styles/Signup.css';
-import logo from '../assets/logo.png';
-import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Asegúrate de tener react-icons instalados
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 function SignUp() {
-  const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar la contraseña
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(null); // Estado para manejar errores
 
   const togglePasswordVisibility = () => {
-    setShowPassword((prevShowPassword) => !prevShowPassword); // Cambia el estado
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Previene el comportamiento por defecto del formulario
+    setError(null); // Reinicia el error
+
+    try {
+      const data = await signUp(email, password); // Llama a la función de signup
+      // Aquí puedes manejar el token (data.token) según lo necesites
+      console.log('Token:', data.token);
+    } catch (err) {
+      setError(err.message); // Establece el mensaje de error
+    }
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
+    <div className="signup-container">
+      <div className="signup-box">
         <h2> Regístrate en TwitSnap Backoffice!</h2>
-        <form className="login-form">
-          <label htmlFor="username">Email o nombre de usuario</label>
+        <form className="signup-form" onSubmit={handleSubmit}>
+          <label htmlFor="username">Email</label>
           <input 
             type="text" 
             id="username" 
             placeholder="Email o nombre de usuario" 
             className="input-field"
+            value={email} // Controla el input
+            onChange={(e) => setEmail(e.target.value)} // Actualiza el estado
           />
           <label htmlFor="password">Contraseña</label>
           <div className="password-container">
@@ -30,6 +50,8 @@ function SignUp() {
               id="password" 
               placeholder="Contraseña" 
               className="input-field password-input" 
+              value={password} // Controla el input
+              onChange={(e) => setPassword(e.target.value)} // Actualiza el estado
             />
             <button 
               type="button" 
@@ -39,7 +61,8 @@ function SignUp() {
               {showPassword ? <FaEyeSlash size={24} /> : <FaEye size={24} />}
             </button>
           </div>
-          <button type="submit">Iniciar sesión</button>
+          {error && <p className="error-message">{error}</p>} {/* Muestra el mensaje de error */}
+          <button type="submit">Regístrate</button>
         </form>
         <hr className="separator" />
         <div className="extra-links">

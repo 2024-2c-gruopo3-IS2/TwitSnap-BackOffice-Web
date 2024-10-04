@@ -1,90 +1,142 @@
-.signup-container {
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #121212; /* Color de fondo oscuro */
+    color: #e0e0e0; /* Color de texto claro */
+  }
+  
+  .signup-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Ocupa toda la altura de la ventana */
-    background-color: #121212; /* Color de fondo oscuro */
-}
-
-.signup-box {
-    background-color: #1e1e1e; /* Fondo gris oscuro */
-    border-radius: 10px; /* Bordes redondeados */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Sombra más pronunciada */
-    padding: 20px; /* Espaciado interno */
-    width: 400px; /* Ancho fijo */
-    min-width: 500px;;
-    text-align: center; /* Centrar texto */
-}
-
-.logo {
-    width: 80%; /* Ajusta el tamaño del logo */
-    margin-bottom: 20px; /* Espaciado inferior */
-}
-
-.form-group {
-    margin-bottom: 15px; /* Espaciado inferior entre campos */
-    text-align: left; /* Alinear texto a la izquierda */
-}
-
-.input-field {
-    width: 100%; /* Ancho completo */
-    padding: 10px; /* Espaciado interno */
-    border: 1px solid #444; /* Borde gris más claro */
-    border-radius: 5px; /* Bordes redondeados */
-    font-size: 16px; /* Tamaño de fuente */
-    background-color: #333; /* Fondo de entrada oscuro */
-    color: #fff; /* Color de texto blanco */
-}
-
-.input-field::placeholder {
-    color: #aaa; /* Color del texto del placeholder */
-}
-
-.password-container {
+    margin-top: 80px;
+  }
+  
+  .signup-box {
+    background-color: #1e1e1e; /* Fondo del contenedor más oscuro */
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Sombra más pronunciada */
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+  }
+  
+  .logo {
+    width: 0px;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+    color: #ffffff; /* Texto del encabezado blanco */
+  }
+  
+  /* Estilos para los inputs */
+  .signup-form input {
+    width: 100%; /* Asegura que el input ocupe el 100% del ancho */
+    padding: 10px;
+    margin: 10px 0; /* Espacio superior e inferior */
+    border-radius: 4px;
+    border: 1px solid #444; /* Borde gris oscuro */
+    background-color: #333; /* Fondo de entrada más oscuro */
+    color: #ffffff; /* Texto de entrada blanco */
+    font-size: 16px;
+    box-sizing: border-box; /* Incluye padding y border en el tamaño total */
+  }
+  
+  /* Botones */
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: #1da1f2; /* Color del botón */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  button:hover {
+    background-color: #0d8ae8; /* Color del botón al pasar el cursor */
+  }
+  
+  .extra-links {
+    margin-top: 20px;
+  }
+  
+  .extra-links a {
+    color: #1da1f2; /* Color de los enlaces */
+    text-decoration: none;
+    font-size: 14px;
+  }
+  
+  .extra-links a:hover {
+    text-decoration: underline; /* Subrayar al pasar el cursor */
+  }
+  
+  .extra-links span {
+    margin: 0 10px;
+    color: #b0b0b0; /* Color del texto del separador más claro */
+  }
+  
+  .no-account-text {
+    font-size: 14px; /* Mismo tamaño que los enlaces */
+    color: #000; /* O el color que prefieras */
+    margin-right: 5px; /* Espacio entre el texto y el enlace */
+  }
+  
+  .separator {
+    margin: 20px 0;  /* Espacio superior e inferior */
+    border: none;    /* Sin borde predeterminado */
+    border-top: 1px solid #ccc;  /* Borde superior */
+    width: 100%;     /* Que ocupe todo el ancho del contenedor */
+  }
+  
+  label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    text-align: left; /* Alineación a la izquierda */
+  }
+  
+  .password-container {
     display: flex;
-    align-items: center; /* Centrar verticalmente */
-}
-
-.password-visibility-button {
-    background: none; /* Sin fondo */
-    border: none; /* Sin borde */
-    cursor: pointer; /* Cambia el cursor al pasar el mouse */
-}
-
-.submit-button {
-    width: 100%; /* Ancho completo */
+    align-items: center; 
+    position: relative;
+    width: 100%; /* Asegúrate de que el contenedor ocupe el 100% del ancho */
+  }
+  
+  .password-input {
+    flex: 1; /* Toma el espacio restante */
     padding: 10px; /* Espaciado interno */
-    background-color: #007BFF; /* Color de fondo del botón */
-    color: white; /* Color del texto */
+    border: 1px solid #444; /* Cambia el borde a gris oscuro para uniformidad */
+    border-radius: 4px; 
+    padding-right: 40px; /* Espacio a la derecha para el botón */
+    background-color: #333; /* Fondo de entrada más oscuro para uniformidad */
+    color: #ffffff; /* Texto de entrada blanco */
+    font-size: 16px; /* Tamaño de fuente uniforme */
+    box-sizing: border-box; /* Incluye padding y border en el tamaño total */
+  }
+  
+  .password-visibility-button {
+    background: transparent; /* Sin fondo */
     border: none; /* Sin borde */
-    border-radius: 5px; /* Bordes redondeados */
-    font-size: 16px; /* Tamaño de fuente */
-    cursor: pointer; /* Cambia el cursor al pasar el mouse */
-    transition: background-color 0.3s; /* Efecto de transición */
-}
-
-.submit-button:hover {
-    background-color: #0056b3; /* Color de fondo al pasar el mouse */
-}
-
-.separator {
-    margin: 20px 0; /* Espaciado superior e inferior */
-    border: 0; /* Sin borde */
-    height: 1px; /* Alto del separador */
-    background-color: #444; /* Color del separador */
-}
-
-.extra-links {
-    display: flex;
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    position: absolute; /* Posiciona el botón de forma absoluta */
+    right: 5px; /* Margen desde el lado derecho */
+    top: 35%; /* Centra verticalmente */
+    transform: translateY(-50%); /* Ajuste para centrar */
+    max-width: 40px;
+    max-height: 40px;
+    display: flex; /* Utiliza flexbox para centrar el contenido */
     justify-content: center; /* Centrar horizontalmente */
-}
-
-.login-link {
-    color: #007BFF; /* Color del enlace */
-    text-decoration: none; /* Sin subrayado */
-    margin-left: 5px; /* Espaciado a la izquierda */
-}
-
-.login-link:hover {
-    text-decoration: underline; /* Subrayar al pasar el mouse */
-}
+    align-items: center; /* Centrar verticalmente */
+  }
+  
+  .password-visibility-button:hover {
+    color: "#333"; /* Oculta el texto al pasar el cursor */
+    background-color: transparent; /* Mantiene el fondo transparente */
+  }
+  
