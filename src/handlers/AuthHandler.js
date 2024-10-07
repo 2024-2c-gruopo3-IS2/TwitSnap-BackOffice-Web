@@ -3,7 +3,7 @@
 import { SignJWT, jwtVerify } from 'jose';
 
 const TOKEN_KEY = 'token';
-const SECRET_KEY = new TextEncoder().encode('tu_clave_secreta'); // Cambia esto por una clave secreta más segura
+const SECRET_KEY = new TextEncoder().encode('twitsnap-secret-key'); 
 
 /**
  * Crea un token JWS con los datos del usuario.

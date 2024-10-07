@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { login } from '../handlers/LoginHandler'; // Importa la función login
 import '../styles/Login.css';
-import logo from '../assets/logo.png';
+import logo from '../assets/images/logo.png';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 function Login() {

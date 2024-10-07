@@ -1,18 +1,22 @@
 // src/Home.js
-import React from 'react';
-import '../styles/Home.css';  // Puedes añadir estilos personalizados
+import React, { useState } from 'react';
+import SideBar from './SideBar';
+import ServiceView from './ServiceView';
+import BlockUsers from './BlockUsers';
+import TwitSnapsView from './TwitSnapsView';
+import '../styles/Home.css';
 
 const Home = () => {
+  const [currentSection, setCurrentSection] = useState('services');
+
   return (
     <div className="home-container">
-      <header className="home-header">
-        <h1>Welcome to My Website</h1>
-        <p>This is the home page of my awesome React project!</p>
-      </header>
-      <section className="home-content">
-        <p>Here you can explore various sections of the site.</p>
-        <a href="/about" className="home-link">Learn more about us</a>
-      </section>
+      <SideBar onSelect={setCurrentSection} currentSection={currentSection} />
+      <main className="content">
+        {currentSection === 'services' && <ServiceView />}
+        {currentSection === 'users' && <BlockUsers />}
+        {currentSection === 'twitsnaps' && <TwitSnapsView />}
+      </main>
     </div>
   );
 };

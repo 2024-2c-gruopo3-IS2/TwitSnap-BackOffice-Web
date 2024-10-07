@@ -3,12 +3,13 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Home from './components/Home';
-import { getToken } from './handlers/AuthHandler'; // Asegúrate de implementar getToken en un archivo JS
+import TwitSnapsView from './components/TwitSnapsView';
+import { createToken, getToken } from './handlers/AuthHandler'; // Asegúrate de implementar getToken en un archivo JS
 import { getProfile } from './handlers/ProfileHandler'; // Asegúrate de implementar getProfile
 import Spinner from 'react-bootstrap/Spinner'; // Ejemplo: Usando Spinner de Bootstrap, puedes elegir otro componente de carga
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -25,6 +26,7 @@ function App() {
         setIsLoading(false);
       }
     };
+    createToken();
     checkAuth();
   }, []);
 
@@ -45,6 +47,7 @@ function App() {
         <Route path="/" element={isAuthenticated ? <Home /> : <Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/twitsnaps" element={<TwitSnapsView />} />
         {/* Si no está autenticado, redirigir al login */}
         {!isAuthenticated && <Route path="*" element={<Navigate to="/login" />} />}
       </Routes>

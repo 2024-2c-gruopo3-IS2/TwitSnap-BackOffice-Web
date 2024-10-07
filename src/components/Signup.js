@@ -32,7 +32,7 @@ function SignUp() {
   return (
     <div className="signup-container">
       <div className="signup-box">
-        <h2> Regístrate en TwitSnap Backoffice!</h2>
+        <h2> ¡Regístrate en TwitSnap Backoffice!</h2>
         <form className="signup-form" onSubmit={handleSubmit}>
           <label htmlFor="username">Email</label>
           <input 
