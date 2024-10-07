@@ -1,18 +1,48 @@
 // src/BlockUsers.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { getAllUsers } from '../handlers/ProfileHandler'; // Asegúrate de importar la función
+import { blockUser, unblockUser } from '../handlers/BlockUserHandler'; // Importa las funciones para bloquear/desbloquear
 import '../styles/BlockUsers.css'; // Asegúrate de tener este archivo de estilos
 
 const BlockUsers = () => {
-  const [users, setUsers] = useState([
-    { id: 1, name: 'John Doe', isBlocked: false },
-    { id: 2, name: 'Jane Smith', isBlocked: true }
-  ]);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const toggleUserBlock = (id) => {
-    setUsers(users.map(user => 
-      user.id === id ? { ...user, isBlocked: !user.isBlocked } : user
-    ));
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const result = await getAllUsers();
+      if (result.success) {
+        setUsers(result.users);
+      } else {
+        setError(result.message);
+      }
+      setLoading(false);
+    };
+
+    fetchUsers();
+  }, []);
+
+  const toggleUserBlock = async (user) => {
+    const action = user.isBlocked ? unblockUser : blockUser;
+    const result = await action(user.email);
+    
+    if (result.success) {
+      setUsers(users.map(u => 
+        u.id === user.id ? { ...u, isBlocked: !u.isBlocked } : u
+      ));
+    } else {
+      setError(result.message);
+    }
   };
+
+  if (loading) {
+    return <div>Loading users...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <section className="section">
@@ -31,7 +61,7 @@ const BlockUsers = () => {
               <td>{user.name}</td>
               <td>{user.isBlocked ? 'Blocked' : 'Active'}</td>
               <td>
-                <button onClick={() => toggleUserBlock(user.id)}>
+                <button onClick={() => toggleUserBlock(user)}>
                   {user.isBlocked ? 'Unblock' : 'Block'}
                 </button>
               </td>
