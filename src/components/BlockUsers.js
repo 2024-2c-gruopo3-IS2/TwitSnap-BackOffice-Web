@@ -13,7 +13,9 @@ const BlockUsers = () => {
     const fetchUsers = async () => {
       const result = await getAllUsers();
       if (result.success) {
+        console.log("Usuarios antes de ser cargados:", result.users)
         setUsers(result.users);
+        console.log("Usuarios cargados: ", users);
       } else {
         setError(result.message);
       }
@@ -58,7 +60,7 @@ const BlockUsers = () => {
         <tbody>
           {users.map(user => (
             <tr key={user.id}>
-              <td>{user.name}</td>
+              <td>{user}</td>
               <td>{user.isBlocked ? 'Blocked' : 'Active'}</td>
               <td>
                 <button onClick={() => toggleUserBlock(user)}>
