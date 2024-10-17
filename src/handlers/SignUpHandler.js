@@ -1,4 +1,4 @@
-import { saveToken } from './AuthHandler';
+import { saveToken } from './AuthHandler'; // Asegúrate de tener un módulo para manejar el token
 
 export async function signUp(email, password) {
   const API_URL = 'https://auth-microservice-vvr6.onrender.com/auth/signup';
@@ -13,12 +13,11 @@ export async function signUp(email, password) {
     });
 
     const data = await response.json();
-
     console.log('Data:', data);
 
     if (response.ok) {
       if (data.token) {
-        await saveToken(data.token);
+        saveToken(data.token); // Guarda el token si existe
         return { success: true, token: data.token };
       } else {
         return { success: false, message: data.message || 'Error al registrar el usuario' };
@@ -27,6 +26,6 @@ export async function signUp(email, password) {
     return { success: false, message: data.message || 'Error al registrar el usuario' };
   } catch (error) {
     console.error('Error al registrar el usuario:', error);
-    return { success: false, message: 'Error al conectar con el servidor.' };
+    throw new Error('Error al conectar con el servidor.');
   }
 }

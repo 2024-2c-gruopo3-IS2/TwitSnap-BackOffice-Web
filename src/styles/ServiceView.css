@@ -1,15 +1,13 @@
-/* src/styles/ServiceView.css */
-
 .section {
     margin: 20px;
     padding: 15px;
-    background-color: #f9f9f9;
+    background-color: #1e1e1e; /* Fondo oscuro */
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
-    color: #333;
+    color: #1da1f2; /* Azul claro para títulos */
     margin-bottom: 15px;
 }
 
@@ -21,14 +19,14 @@ table {
 th, td {
     padding: 12px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #2e2e2e; /* Consistente con los fondos oscuros */
 }
 
 th {
-    background-color: #4CAF50;
-    color: white;
+    background-color: #2e2e2e; /* Fondo oscuro */
+    color: white; /* Color del texto blanco */
 }
 
 tr:hover {
-    background-color: #f1f1f1;
+    background-color: #0d8ae8; /* Color al hacer hover */
 }

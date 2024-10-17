@@ -1,15 +1,13 @@
-/* src/styles/BlockUsers.css */
-
 .section {
     margin: 20px;
     padding: 15px;
-    background-color: #545454;
+    background-color: #1e1e1e; /* Fondo oscuro */
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
-    color: #333;
+    color: #1da1f2; /* Azul claro para títulos */
     margin-bottom: 15px;
 }
 
@@ -21,16 +19,16 @@ table {
 th, td {
     padding: 12px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #2e2e2e; /* Consistente con los fondos oscuros */
 }
 
 th {
-    background-color: #4CAF50;
-    color: white;
+    background-color: #2e2e2e; /* Fondo oscuro */
+    color: white; /* Color del texto blanco */
 }
 
 tr:hover {
-    background-color: #f1f1f1;
+    background-color: #0d8ae8; /* Color al hacer hover */
 }
 
 button {
@@ -38,11 +36,11 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    background-color: #007BFF;
+    background-color: #1da1f2; /* Botón azul claro */
     color: white;
     transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #0d8ae8; /* Cambia color al pasar el cursor */
 }

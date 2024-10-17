@@ -48,7 +48,7 @@ const BlockUsers = () => {
 
   return (
     <section className="section">
-      <h2>Manage Users</h2>
+      <h2>Administrar Usuarios</h2>
       <table>
         <thead>
           <tr>

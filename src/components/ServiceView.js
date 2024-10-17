@@ -4,8 +4,8 @@ import '../styles/ServiceView.css'; // Asegúrate de tener este archivo de estil
 
 const ServiceView = () => {
   const [services, setServices] = useState([
-    { id: 1, name: 'Service 1', status: 'Active', createdAt: '2023-05-01', description: 'Main API Service' },
-    { id: 2, name: 'Service 2', status: 'Inactive', createdAt: '2023-06-15', description: 'Notification Service' }
+    { id: 1, name: 'Servicio 1', status: 'Activo', createdAt: '2023-05-01', description: 'Servicio de Autenticación' },
+    { id: 2, name: 'Servicio 2', status: 'Inactivo', createdAt: '2023-06-15', description: 'Servicio de Posteo' }
   ]);
 
   return (
@@ -14,10 +14,10 @@ const ServiceView = () => {
       <table>
         <thead>
           <tr>
-            <th>Service Name</th>
-            <th>Status</th>
-            <th>Created At</th>
-            <th>Description</th>
+            <th>Servicio</th>
+            <th>Estado</th>
+            <th>Creado en</th>
+            <th>Descripción</th>
           </tr>
         </thead>
         <tbody>

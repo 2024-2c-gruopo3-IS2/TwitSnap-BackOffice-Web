@@ -140,3 +140,14 @@ body {
     background-color: transparent; /* Mantiene el fondo transparente */
   }
   
+  .error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+    text-align: left;
+  }
+  
+  /* Estilo para inputs con error */
+  .input-error {
+    border-color: red; /* Borde rojo para inputs con error */
+  }

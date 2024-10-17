@@ -1,8 +1,6 @@
-/* src/TwitSnapsView.css */
-
 .twitsnap-view {
     padding: 20px;
-    background-color: #545454;
+    background-color: #1e1e1e; /* Fondo oscuro */
     border-radius: 8px;
 }
 
@@ -15,14 +13,14 @@
 .twitsnap-view td {
     padding: 10px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #2e2e2e; /* Consistente con los fondos oscuros */
 }
 
 .twitsnap-view th {
-    background-color: #007bff;
-    color: white;
+    background-color: #2e2e2e; /* Fondo oscuro */
+    color: white; /* Color del texto blanco */
 }
 
 .twitsnap-view tr:hover {
-    background-color: #f1f1f1;
+    background-color: #0d8ae8; /* Color al hacer hover */
 }

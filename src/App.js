@@ -4,12 +4,12 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Home from './components/Home';
 import TwitSnapsView from './components/TwitSnapsView';
-import { createToken, getToken } from './handlers/AuthHandler'; // Asegúrate de implementar getToken en un archivo JS
+import { createToken, getToken, saveToken } from './handlers/AuthHandler'; // Asegúrate de implementar getToken en un archivo JS
 import { getProfile } from './handlers/ProfileHandler'; // Asegúrate de implementar getProfile
 import Spinner from 'react-bootstrap/Spinner'; // Ejemplo: Usando Spinner de Bootstrap, puedes elegir otro componente de carga
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ function App() {
     <Router>
       <Routes>
         {/* Si está autenticado, redirigir a home, de lo contrario mostrar login */}
-        <Route path="/" element={isAuthenticated ? <Home /> : <Login />} />
+        <Route path="/" element={isAuthenticated ? <Home /> : <Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/twitsnaps" element={<TwitSnapsView />} />

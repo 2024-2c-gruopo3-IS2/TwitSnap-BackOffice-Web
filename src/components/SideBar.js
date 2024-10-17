@@ -14,7 +14,7 @@ const SideBar = ({ onSelect, currentSection }) => {
             <div className={`sidebar-item ${currentSection === 'services' ? 'active' : ''}`}>
               <a href="#" onClick={() => onSelect('services')}>
                 <img src={servicesLogo} alt="Services" className="sidebar-logo" />
-                Services
+                Servicios
               </a>
             </div>
           </li>
@@ -22,7 +22,7 @@ const SideBar = ({ onSelect, currentSection }) => {
             <div className={`sidebar-item ${currentSection === 'users' ? 'active' : ''}`}>
               <a href="#" onClick={() => onSelect('users')}>
                 <img src={usersLogo} alt="Manage Users" className="sidebar-logo" />
-                Manage Users
+                Administrar Usuarios
               </a>
             </div>
           </li>
