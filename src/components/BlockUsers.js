@@ -6,6 +6,19 @@ import '../styles/BlockUsers.css';
 // Caché para almacenar los usuarios temporalmente
 let usersCache = null;
 
+const StatusIndicator = ({ isBlocked }) => (
+  <span
+    style={{
+      display: 'inline-block',
+      width: '10px',
+      height: '10px',
+      borderRadius: '50%',
+      backgroundColor: isBlocked ? '#F44336' : '#4CAF50', // Rojo si está bloqueado, verde si está activo
+      marginRight: '5px',
+    }}
+  />
+);
+
 const BlockUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -95,9 +108,23 @@ const BlockUsers = () => {
             <tr key={user.username}>
               <td>{user.username}</td>
               <td>{user.email}</td>
-              <td>{user.isBlocked ? 'Bloqueado' : 'Activo'}</td>
               <td>
-                <button onClick={() => toggleUserBlock(user)} disabled={loadingUsers[user.email]}>
+                <StatusIndicator isBlocked={user.isBlocked} />
+                {user.isBlocked ? 'Bloqueado' : 'Activo'}
+              </td>
+              <td>
+                <button 
+                  onClick={() => toggleUserBlock(user)} 
+                  disabled={loadingUsers[user.email]}
+                  style={{
+                    backgroundColor: user.isBlocked ? '#4CAF50' : '#F44336', // Verde si se va a desbloquear, rojo si se va a bloquear
+                    color: 'white', // Color del texto
+                    padding: '8px 16px', // Espaciado interno
+                    border: 'none', // Sin borde
+                    borderRadius: '4px', // Bordes redondeados
+                    cursor: 'pointer', // Cambia el cursor a puntero
+                  }}
+                >
                   {loadingUsers[user.email] ? 'Procesando...' : (user.isBlocked ? 'Desbloquear' : 'Bloquear')}
                 </button>
               </td>
