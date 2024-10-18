@@ -16,6 +16,7 @@ export async function signUp(email, password) {
     console.log('Data:', data);
 
     if (response.ok) {
+      console.log('Token:', data.token);
       if (data.token) {
         saveToken(data.token); // Guarda el token si existe
         return { success: true, token: data.token };

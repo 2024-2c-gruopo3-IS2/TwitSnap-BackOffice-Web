@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getAllUsers } from '../handlers/ProfileHandler';
-import { blockUser, unblockUser, getEmailByUsername, getUsersStatus, getStatusByEmail } from '../handlers/BlockUserHandler';
+import { getAllUsers, getEmailByUsername } from '../handlers/ProfileHandler';
+import { blockUser, unblockUser, getUsersStatus, getStatusByEmail } from '../handlers/BlockUserHandler';
 import '../styles/BlockUsers.css';
 
 // Caché para almacenar los usuarios temporalmente

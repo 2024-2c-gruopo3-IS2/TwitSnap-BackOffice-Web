@@ -23,7 +23,14 @@ function Login() {
 
     try {
       const data = await login(email, password); // Llama a la función de login
-      // Aquí puedes manejar el token (data.token) según lo necesites
+      
+      if (data.token) {
+        // Guarda el token en localStorage
+        localStorage.setItem('token', data.token);
+        // Redirige a la página de inicio
+        window.location.href = '/home';
+      }
+
       console.log('Token:', data.token);
     } catch (err) {
       setError(err.message); // Establece el mensaje de error

@@ -1,7 +1,6 @@
 // src/BlockUserHandler.js
 
 const API_BASE_URL = 'https://auth-microservice-vvr6.onrender.com'; // Asegúrate de que esta URL sea la correcta para tu API
-const API_PROFILE_URL = 'https://profile-microservice.onrender.com'; // Asegúrate de que esta URL sea la correcta para tu API
 
 export const blockUser = async (email) => {
     try {
@@ -51,28 +50,7 @@ export const unblockUser = async (email) => {
     }
 };
 
-export const getEmailByUsername = async (username) => {
-    try {
-        const response = await fetch(`${API_PROFILE_URL}/profiles/by-username?username=${username}`, { 
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to fetch user profile');
-        }
-
-        const profile = await response.json(); // Asumiendo que el API devuelve el perfil completo
-        return profile.email; // Devuelve el email del perfil
-    } catch (error) {
-        return { success: false, message: error.message };
-    }
-};
-
-// NUEVO: Handler para obtener el estado de los usuarios
 export const getUsersStatus = async () => {
     try {
         const response = await fetch(`${API_BASE_URL}/auth/get-users-status`, { 

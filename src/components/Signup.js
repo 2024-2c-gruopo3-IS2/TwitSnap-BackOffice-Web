@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Asegúrate de importar useNavigate
 import { signUp } from '../handlers/SignUpHandler'; // Importa la función signup
 import '../styles/Signup.css';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
@@ -13,6 +13,8 @@ function SignUp() {
     email: '',
     password: '',
   });
+
+  const navigate = useNavigate(); // Inicializa useNavigate
 
   // Expresiones regulares para validación
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -58,10 +60,7 @@ function SignUp() {
       const response = await signUp(email, password); // Llama a la función de signup
     
       if (response.success) {
-        router.push({
-          pathname: './Home', // Redirige a la página de inicio
-          params: { email, password }
-        });
+        window.location.href = '/home';
       } else {
         if (response.message === 'Email already in use') {
           alert('Error', 'El correo electrónico ya está en uso.');
