@@ -1,9 +1,53 @@
-.twitsnap-view {
-    padding: 20px;
-    background-color: #1e1e1e; /* Fondo oscuro */
-    border-radius: 8px;
+/* Estilo de la barra de búsqueda */
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
 }
 
+.search-icon {
+    margin-right: 10px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 8px;
+    background-color: #2e2e2e;
+    border: 1px solid #444;
+    color: white;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.search-bar input::placeholder {
+    color: #888;
+}
+
+/* Estilo de los botones de filtro */
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.filter-buttons button {
+    padding: 8px 12px;
+    background-color: #2e2e2e;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.filter-buttons button.active {
+    background-color: #0d8ae8;
+}
+
+.filter-buttons button:hover {
+    background-color: #0b6bbf;
+}
+
+/* Estilo de la tabla */
 .twitsnap-view table {
     width: 100%;
     border-collapse: collapse;
@@ -13,14 +57,62 @@
 .twitsnap-view td {
     padding: 10px;
     text-align: left;
-    border-bottom: 1px solid #2e2e2e; /* Consistente con los fondos oscuros */
+    border-bottom: 1px solid #2e2e2e;
 }
 
 .twitsnap-view th {
-    background-color: #2e2e2e; /* Fondo oscuro */
-    color: white; /* Color del texto blanco */
+    background-color: #2e2e2e;
+    color: white;
 }
 
 .twitsnap-view tr:hover {
-    background-color: #0d8ae8; /* Color al hacer hover */
+    background-color: #0d8ae8;
+}
+
+/* Ajustar anchos de columna */
+.twitsnap-view th:nth-child(1), .twitsnap-view td:nth-child(1) {
+    width: 35%;
+}
+
+.twitsnap-view th:nth-child(2), .twitsnap-view td:nth-child(2) {
+    width: 15%;
+}
+
+.twitsnap-view th:nth-child(3), .twitsnap-view td:nth-child(3) {
+    width: 25%;
+}
+
+.twitsnap-view th:nth-child(4), .twitsnap-view td:nth-child(4) {
+    width: 10%;
+}
+
+.twitsnap-view th:nth-child(5), .twitsnap-view td:nth-child(5) {
+    width: 15%;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.search-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 8px;
+    background-color: #2e2e2e;
+    border: 1px solid #444;
+    color: white;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.search-bar input::placeholder {
+    color: #888;
 }

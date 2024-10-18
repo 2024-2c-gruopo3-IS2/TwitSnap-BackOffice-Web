@@ -1,0 +1,60 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8); /* Fondo más oscuro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #1e1e1e; /* Fondo oscuro similar a X */
+    color: white; /* Texto blanco */
+    padding: 40px; /* Mayor padding para hacer el modal más grande */
+    border-radius: 8px; /* Bordes más redondeados */
+    width: 700px; /* Ancho aumentado del modal */
+    max-width: 90%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Sombra para dar profundidad */
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px; /* Ajustado para estar más cerca de la esquina */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0; /* Sin relleno */
+    width: 25px; /* Establecer ancho fijo */
+    height: 25px; /* Establecer alto fijo */
+}
+
+.close-icon {
+    width: 100%; /* Asegurar que la imagen ocupe todo el botón */
+    height: 100%; /* Asegurar que la imagen ocupe todo el botón */
+    transition: filter 0.3s; /* Transición suave para el hover */
+}
+
+.modal-close:hover .close-icon {
+    filter: brightness(0.8); /* Oscurecer el icono al pasar el cursor */
+}
+
+.snap-details {
+    border: 1px solid #3a3a3a; /* Bordes sutiles alrededor del contenido */
+    padding: 20px; /* Relleno para espaciar el contenido */
+    border-radius: 5px; /* Bordes redondeados */
+    background: rgba(255, 255, 255, 0.1); /* Fondo sutil para destacar el contenido */
+    margin-top: 20px; /* Espacio por encima del contenido */
+}
+
+.snap-details p {
+    margin: 5px 0; /* Espaciado entre párrafos */
+}
+
+.snap-details strong {
+    color: #0d8ae8; /* Color destacado para los títulos */
+}
