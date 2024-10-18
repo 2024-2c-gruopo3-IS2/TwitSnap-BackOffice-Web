@@ -10,7 +10,7 @@ const ServiceView = () => {
 
   return (
     <section className="section">
-      <h2>Service List</h2>
+      <h2>Servicios</h2>
       <table>
         <thead>
           <tr>

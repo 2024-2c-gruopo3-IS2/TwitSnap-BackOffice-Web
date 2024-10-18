@@ -193,7 +193,7 @@ export async function getAllUsers() {
         const data = await response.json();
         if (response.ok) {
             console.log('Usuarios encontrados:', data);
-            return { success: true, users: data };
+            return { success: true, data: data };
         } else {
             console.log('Error al obtener usuarios:', data);
             return { success: false, message: data.detail || 'Error al obtener usuarios.' };

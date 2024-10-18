@@ -1,46 +1,32 @@
-.section {
-    margin: 20px;
-    padding: 15px;
-    background-color: #1e1e1e; /* Fondo oscuro */
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-    color: #1da1f2; /* Azul claro para títulos */
-    margin-bottom: 15px;
-}
-
 table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed; /* Esto asegura que las columnas conserven su tamaño fijo */
 }
 
 th, td {
     padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #2e2e2e; /* Consistente con los fondos oscuros */
+    text-align: center;
+    border-bottom: 1px solid #2e2e2e;
+    width: 25%; /* Establece un ancho fijo para las columnas */
 }
 
-th {
-    background-color: #2e2e2e; /* Fondo oscuro */
-    color: white; /* Color del texto blanco */
+th:nth-child(1), td:nth-child(1) {
+    width: 150px; /* Fija el tamaño de la columna de nombres de usuario */
+}
+
+th:nth-child(2), td:nth-child(2) {
+    width: 200px; /* Fija el tamaño de la columna de correos electrónicos */
+}
+
+th:nth-child(3), td:nth-child(3) {
+    width: 100px; /* Fija el tamaño de la columna de estado */
+}
+
+th:nth-child(4), td:nth-child(4) {
+    width: 150px; /* Fija el tamaño de la columna de acción */
 }
 
 tr:hover {
-    background-color: #0d8ae8; /* Color al hacer hover */
-}
-
-button {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #1da1f2; /* Botón azul claro */
-    color: white;
-    transition: background-color 0.3s;
-}
-
-button:hover {
-    background-color: #0d8ae8; /* Cambia color al pasar el cursor */
+    background-color: #0d8ae8;
 }
