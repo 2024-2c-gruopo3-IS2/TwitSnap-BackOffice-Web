@@ -1,0 +1,56 @@
+/* src/styles/TopBar.css */
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1c1c1c; /* Color modificado para la barra superior */
+  padding: 10px 20px;
+  color: #e0e0e0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px; /* Altura de la barra superior */
+  z-index: 1000; /* Asegura que esté encima de otros elementos */
+  white-space: nowrap; /* Evita que el texto se ajuste a la siguiente línea */
+  overflow: hidden; /* Oculta el desbordamiento de texto */
+  text-overflow: ellipsis; /* Muestra puntos suspensivos si el texto desborda */
+}
+
+.logo {
+  align-items: start;
+}
+
+.logo-title {
+  font-size: 1.5rem; /* Mismo tamaño de fuente */
+  font-weight: bold; /* Mismo peso de fuente */
+  margin-left: -625px; /* Espacio opcional a la izquierda */
+  align-self: center; /* Centra verticalmente */
+}
+
+.logo-image {
+  width: 100px; /* Ancho del bloque */
+  height: 100px; /* Alto del bloque */
+  object-fit: contain; /* Asegura que la imagen se ajuste sin deformarse */
+  margin-right: 10px; /* Espacio entre la imagen y el texto */
+  align-self: center; /* Centra verticalmente */
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.profile span {
+  margin-right: 10px;
+  font-size: 1rem;
+}
+
+.profile-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #e0e0e0; /* Consistente con el texto */
+}

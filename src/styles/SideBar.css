@@ -47,4 +47,6 @@
   width: 20px; /* Ajusta el tamaño del logo */
   height: 20px; /* Ajusta el tamaño del logo */
   margin-right: 10px; /* Espacio entre logo y texto */
+  margin-left: 10px;
 }
+

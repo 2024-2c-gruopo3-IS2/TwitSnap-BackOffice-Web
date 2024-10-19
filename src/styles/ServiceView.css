@@ -1,13 +1,13 @@
 .section {
     margin: 20px;
     padding: 15px;
-    background-color: #1e1e1e; /* Fondo oscuro */
+    background-color: #1e1e1e;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
-    color: #1da1f2; /* Azul claro para títulos */
+    color: #1da1f2;
     margin-bottom: 15px;
 }
 
@@ -19,14 +19,40 @@ table {
 th, td {
     padding: 12px;
     text-align: left;
-    border-bottom: 1px solid #2e2e2e; /* Consistente con los fondos oscuros */
+    border-bottom: 1px solid #2e2e2e;
+    vertical-align: middle;
 }
 
 th {
-    background-color: #2e2e2e; /* Fondo oscuro */
-    color: white; /* Color del texto blanco */
+    background-color: #2e2e2e;
+    color: white;
 }
 
 tr:hover {
-    background-color: #0d8ae8; /* Color al hacer hover */
+    background-color: #0d8ae8;
+}
+
+td {
+    word-wrap: break-word; /* Permite que el texto se ajuste en múltiples líneas */
+    white-space: normal; /* Permite que el contenido largo se divida en líneas */
+    overflow: hidden;
+}
+
+.details-col {
+    text-align: center;
+    width: 40px; /* Mantiene la columna lo más pequeña posible */
+    padding: 0; /* Elimina el padding adicional para reducir el tamaño de la celda */
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    td, th {
+        font-size: 14px;
+    }
 }

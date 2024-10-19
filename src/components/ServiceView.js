@@ -1,16 +1,62 @@
-// src/ServiceView.js
 import React, { useState, useEffect } from 'react';
-import { fetchServices } from '../handlers/ServiceViewHandler'; // Asegúrate de importar las funciones
+import { fetchServices, fetchServiceStatus } from '../handlers/ServiceViewHandler';
 import '../styles/ServiceView.css';
+import ServiceModal from './ServiceModal';
+import moreDetailsImage from '../assets/images/moreDetails.png'; 
 
 const ServiceView = () => {
-  const [services, setServices] = useState([]);
+  const [servicesInfo, setServicesInfo] = useState([]);
+  const [selectedService, setSelectedService] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = (service) => {
+    setSelectedService(service);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedService(null);
+    setIsModalOpen(false);
+  };
+
+  const getServiceDescription = (serviceName) => {
+    switch (serviceName) {
+      case 'metrics-microservice':
+        return 'Provee métricas de los servicios';
+      case 'post-microservice':
+        return 'Permite publicar y obtener posts';
+      case 'profile-microservice':
+        return 'Maneja la información de los usuarios';
+      case 'auth-microservice':
+        return 'Maneja la autenticación de los usuarios';
+      default:
+        return 'Descripción no encontrada';
+    }
+  };
 
   useEffect(() => {
     const loadServices = async () => {
       const fetchedServices = await fetchServices();
-      setServices(fetchedServices);
+
+      const serviceInfo = await Promise.all(
+        fetchedServices.map(async (service) => {
+          const statusData = await fetchServiceStatus(service);
+          return { 
+            name: service,
+            status: statusData.status,
+            createdAt: statusData.createdAt,
+            description: statusData.description,
+            timeRunning: statusData.timeRunning,
+            url: statusData.url,
+            cpuUsage: statusData.cpuUsage,
+            memoryUsage: statusData.memoryUsage,
+          };
+        })
+      );
+
+      setServicesInfo(serviceInfo);
     };
+
     loadServices();
   }, []);
 
@@ -24,19 +70,30 @@ const ServiceView = () => {
             <th>Estado</th>
             <th>Creado en</th>
             <th>Descripción</th>
+            <th>Detalles</th>            
           </tr>
         </thead>
         <tbody>
-          {services.map((service, index) => (
+          {servicesInfo.map((service, index) => (
             <tr key={index}>
               <td>{service.name}</td>
               <td>{service.status}</td>
               <td>{service.createdAt}</td>
-              <td>{service.description}</td>
+              <td>{getServiceDescription(service.name)}</td>
+              <td className="details-col">
+                    <button onClick={() => handleOpenModal(service)}>
+                      <img src={moreDetailsImage} alt="Detalles" />
+                    </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {isModalOpen && selectedService && (
+        <ServiceModal service={selectedService} onClose={handleCloseModal} />
+      )}
+
     </section>
   );
 };

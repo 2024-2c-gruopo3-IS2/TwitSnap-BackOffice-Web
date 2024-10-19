@@ -1,3 +1,4 @@
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -27,20 +28,6 @@ body {
   white-space: nowrap; /* Evita que el texto se ajuste a la siguiente línea */
   overflow: hidden; /* Oculta el desbordamiento de texto */
   text-overflow: ellipsis; /* Muestra puntos suspensivos si el texto desborda */
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.logo-image {
-  width: 100px; /* Ancho del bloque */
-  height: 100px; /* Alto del bloque */
-  object-fit: contain; /* Asegura que la imagen se ajuste sin deformarse */
-  margin-right: 10px; /* Espacio entre la imagen y el texto */
 }
 
 .profile {
@@ -139,4 +126,18 @@ button {
 
 button:hover {
   background-color: #0d8ae8; /* Cambia color al pasar el cursor */
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.logo-image {
+  width: 100px; /* Ancho del bloque */
+  height: 100px; /* Alto del bloque */
+  object-fit: contain; /* Asegura que la imagen se ajuste sin deformarse */
+  margin-right: 10px; /* Espacio entre la imagen y el texto */
 }
