@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { fetchAllSnaps } from '../handlers/TwitSnapsHandler';
 import '../styles/TwitSnapsView.css';
-import TwitSnapModal from './TwitSnapModal';  // Asegúrate de crear un componente de modal
-import moreDetailsImage from '../assets/images/moreDetails.png'; // Importa la imagen
+import TwitSnapModal from './TwitSnapModal'; 
+import moreDetailsImage from '../assets/images/moreDetails.png'; 
 
 const TwitSnapsView = () => {
   const [twitSnaps, setTwitSnaps] = useState([]);
@@ -11,23 +11,35 @@ const TwitSnapsView = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedSnap, setSelectedSnap] = useState(null); // Para el modal
-  const [isModalOpen, setIsModalOpen] = useState(false);  // Control del modal
+  const [selectedSnap, setSelectedSnap] = useState(null); 
+  const [isModalOpen, setIsModalOpen] = useState(false);  
 
   useEffect(() => {
-    const getSnaps = async () => {
-      setLoading(true);
-      const result = await fetchAllSnaps();
-      if (result.success) {
-        setTwitSnaps(result.snaps);
-        setFilteredSnaps(result.snaps);
-      } else {
-        setError(result.message);
-      }
+    const cachedSnaps = localStorage.getItem('twitSnaps');
+    
+    if (cachedSnaps) {
+      // Si hay datos en caché, los usa
+      setTwitSnaps(JSON.parse(cachedSnaps));
+      setFilteredSnaps(JSON.parse(cachedSnaps));
       setLoading(false);
-    };
+    } else {
+      // Si no hay caché, llama a la API
+      const getSnaps = async () => {
+        setLoading(true);
+        const result = await fetchAllSnaps();
+        if (result.success) {
+          setTwitSnaps(result.snaps);
+          setFilteredSnaps(result.snaps);
+          // Guarda los datos en caché
+          localStorage.setItem('twitSnaps', JSON.stringify(result.snaps));
+        } else {
+          setError(result.message);
+        }
+        setLoading(false);
+      };
 
-    getSnaps();
+      getSnaps();
+    }
   }, []);
 
   useEffect(() => {
@@ -111,7 +123,7 @@ const TwitSnapsView = () => {
                   <td className="details-col">
                     <button onClick={() => handleOpenModal(twitSnap)}>
                       <img src={moreDetailsImage} alt="Detalles" style={{ width: '40px', height: '40px' }} />
-                    </button> {/* Botón para abrir modal con la imagen */}
+                    </button>
                   </td>
                 </tr>
               ))}
