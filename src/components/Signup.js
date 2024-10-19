@@ -60,6 +60,7 @@ function SignUp() {
       const response = await signUp(email, password); // Llama a la función de signup
     
       if (response.success) {
+        localStorage.setItem('email', email);
         window.location.href = '/home';
       } else {
         if (response.message === 'Email already in use') {

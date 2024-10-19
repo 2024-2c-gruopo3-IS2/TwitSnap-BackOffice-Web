@@ -27,6 +27,7 @@ function Login() {
       if (data.token) {
         // Guarda el token en localStorage
         localStorage.setItem('token', data.token);
+        localStorage.setItem('email', email);
         // Redirige a la página de inicio
         window.location.href = '/home';
       }

@@ -1,0 +1,32 @@
+.profile-view {
+    padding: 20px;
+    background-color: #1e1e1e; /* Fondo oscuro para el perfil */
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
+    color: #e0e0e0; /* Texto claro */
+    margin: 20px;
+    display: flex; /* Usa flexbox para organizar los elementos */
+    flex-direction: column; /* Coloca los elementos en columna */
+  }
+  
+  .profile-view h2 {
+    color: #1da1f2; /* Azul claro para el título */
+  }
+  
+  .profile-view button {
+    padding: 4px 8px; /* Hacer el botón más pequeño */
+    background-color: #e63946; /* Color rojo */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px; /* Espacio arriba del botón */
+    align-self: flex-start; /* Alinea el botón a la izquierda */
+    max-width: 200px; /* Limita el ancho del botón */
+    min-height: 40px; /* Limita el ancho del botón */
+  }
+  
+  .profile-view button:hover {
+    background-color: #d62839; /* Cambia a un tono rojo más oscuro al pasar el cursor */
+  }
+  

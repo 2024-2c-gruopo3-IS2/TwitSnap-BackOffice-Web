@@ -4,7 +4,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Home from './components/Home';
 import TwitSnapsView from './components/TwitSnapsView';
-import { createToken, getToken } from './handlers/AuthHandler'; // Asegúrate de implementar getToken en un archivo JS
+import { getToken } from './handlers/AuthHandler'; // Asegúrate de implementar getToken en un archivo JS
 import Spinner from 'react-bootstrap/Spinner'; // Ejemplo: Usando Spinner de Bootstrap, puedes elegir otro componente de carga
 
 function App() {
@@ -25,7 +25,6 @@ function App() {
         setIsLoading(false);
       }
     };
-    createToken();
     checkAuth();
   }, []);
 
