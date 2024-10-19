@@ -109,10 +109,8 @@ const TwitSnapsView = () => {
                   <td className="username-col">{twitSnap.username}</td>
                   <td className="date-col">{new Date(twitSnap.created_at).toLocaleString()}</td>
                   <td className="details-col">
-                    <button onClick={() => handleOpenModal(twitSnap)} style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}>
-                      <div style={{ width: '50px', height: '50px', background: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <img src={moreDetailsImage} alt="Detalles" style={{ width: '50px', height: '50px' }} />
-                      </div>
+                    <button onClick={() => handleOpenModal(twitSnap)}>
+                      <img src={moreDetailsImage} alt="Detalles" style={{ width: '40px', height: '40px' }} />
                     </button> {/* Botón para abrir modal con la imagen */}
                   </td>
                 </tr>

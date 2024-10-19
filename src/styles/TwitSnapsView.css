@@ -116,3 +116,19 @@
 .search-bar input::placeholder {
     color: #888;
 }
+
+.details-col button {
+    background: transparent; /* Botón transparente */
+    border: none; /* Sin borde */
+    padding: 0; /* Sin padding para que coincida con el tamaño de la imagen */
+    cursor: pointer; /* Cambia el cursor a pointer */
+    width: 40px; /* Asegúrate que el tamaño coincida con la imagen */
+    height: 40px; /* Asegúrate que el tamaño coincida con la imagen */
+    margin-left: 20px; /* Mover el botón 20 píxeles a la izquierda */
+}
+
+.details-col img {
+    width: 100%; /* La imagen ocupa todo el espacio del botón */
+    height: 100%; /* La imagen ocupa todo el espacio del botón */
+}
+
