@@ -1,12 +1,18 @@
 // src/ServiceView.js
-import React, { useState } from 'react';
-import '../styles/ServiceView.css'; // Asegúrate de tener este archivo de estilos
+import React, { useState, useEffect } from 'react';
+import { fetchServices } from '../handlers/ServiceViewHandler'; // Asegúrate de importar las funciones
+import '../styles/ServiceView.css';
 
 const ServiceView = () => {
-  const [services, setServices] = useState([
-    { id: 1, name: 'Servicio 1', status: 'Activo', createdAt: '2023-05-01', description: 'Servicio de Autenticación' },
-    { id: 2, name: 'Servicio 2', status: 'Inactivo', createdAt: '2023-06-15', description: 'Servicio de Posteo' }
-  ]);
+  const [services, setServices] = useState([]);
+
+  useEffect(() => {
+    const loadServices = async () => {
+      const fetchedServices = await fetchServices();
+      setServices(fetchedServices);
+    };
+    loadServices();
+  }, []);
 
   return (
     <section className="section">
@@ -21,8 +27,8 @@ const ServiceView = () => {
           </tr>
         </thead>
         <tbody>
-          {services.map(service => (
-            <tr key={service.id}>
+          {services.map((service, index) => (
+            <tr key={index}>
               <td>{service.name}</td>
               <td>{service.status}</td>
               <td>{service.createdAt}</td>

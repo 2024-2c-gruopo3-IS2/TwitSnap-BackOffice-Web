@@ -1,5 +1,3 @@
-// src/components/Login.js
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { login } from '../handlers/LoginHandler'; // Importa la función login
@@ -12,6 +10,7 @@ function Login() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null); // Estado para manejar errores
+  const [isLoading, setIsLoading] = useState(false); // Estado para manejar la carga
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -20,21 +19,27 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault(); // Previene el comportamiento por defecto del formulario
     setError(null); // Reinicia el error
+    setIsLoading(true); // Comienza la carga
 
     try {
       const data = await login(email, password); // Llama a la función de login
       
-      if (data.token) {
+      if (data.success) {
         // Guarda el token en localStorage
         localStorage.setItem('token', data.token);
         localStorage.setItem('email', email);
         // Redirige a la página de inicio
         window.location.href = '/home';
+      } else {
+        // Manejar el caso donde el login no fue exitoso
+        setError('Credenciales incorrectas. Inténtalo de nuevo.'); // Mensaje de error
       }
 
       console.log('Token:', data.token);
     } catch (err) {
       setError(err.message); // Establece el mensaje de error
+    } finally {
+      setIsLoading(false); // Finaliza la carga
     }
   };
 
@@ -72,12 +77,11 @@ function Login() {
             </button>
           </div>
           {error && <p className="error-message">{error}</p>} {/* Muestra el mensaje de error */}
-          <button type="submit">Iniciar sesión</button>
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? 'Cargando...' : 'Iniciar sesión'} {/* Cambia el texto del botón */}
+          </button>
         </form>
         <hr className="separator" />
-        <div className="extra-links">
-          <Link to="/">¿Olvidaste tu contraseña?</Link>
-        </div>
         <div className="extra-links">
           <span className="no-account-text">¿No tienes una cuenta?</span>
           <Link to="/signup">Regístrate</Link>

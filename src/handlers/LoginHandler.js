@@ -29,10 +29,10 @@ export const login = async (email, password) => {
       return { success: true, token: data.token };
     }
 
-    return { success: false, message: data.message || 'Error desconocido al iniciar sesión.' };
+    return { success: false, message: data.message };
   } catch (error) {
     console.error('Error en login:', error);
-    return { success: false, message: error.message || 'Error al conectar con el servidor.' };
+    return { success: false, message: error.message };
   }
 };
 

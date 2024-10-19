@@ -39,3 +39,10 @@
   color: #b0b0b0; /* Color de texto del separador más claro */
   margin-right: 5px; /* Espacio entre el texto y el enlace */
 }
+
+.error-message {
+  color: #ff4d4d; /* Rojo para el mensaje de error */
+  margin-top: 10px; /* Espacio superior para el mensaje */
+  font-size: 14px; /* Tamaño del texto del mensaje de error */
+}
+
