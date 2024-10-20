@@ -17,31 +17,19 @@ const TwitSnapsView = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);  
 
   useEffect(() => {
-    const cachedSnaps = localStorage.getItem('twitSnaps');
-    
-    if (cachedSnaps) {
-      // Si hay datos en caché, los usa
-      setTwitSnaps(JSON.parse(cachedSnaps));
-      setFilteredSnaps(JSON.parse(cachedSnaps));
+    const getSnaps = async () => {
+      setLoading(true);
+      const result = await fetchAllSnaps();
+      if (result.success) {
+        setTwitSnaps(result.snaps);
+        setFilteredSnaps(result.snaps);
+      } else {
+        setError(result.message);
+      }
       setLoading(false);
-    } else {
-      // Si no hay caché, llama a la API
-      const getSnaps = async () => {
-        setLoading(true);
-        const result = await fetchAllSnaps();
-        if (result.success) {
-          setTwitSnaps(result.snaps);
-          setFilteredSnaps(result.snaps);
-          // Guarda los datos en caché
-          localStorage.setItem('twitSnaps', JSON.stringify(result.snaps));
-        } else {
-          setError(result.message);
-        }
-        setLoading(false);
-      };
+    };
 
-      getSnaps();
-    }
+    getSnaps();
   }, []);
 
   // Filtro que se activa cuando el término de búsqueda o las fechas cambian
@@ -50,12 +38,9 @@ const TwitSnapsView = () => {
       const value = snap[filterType]?.toString().toLowerCase() || '';
 
       if (filterType === 'created_at' && startDate && endDate) {
-        // Convertimos las fechas a objetos Date
         const snapDate = new Date(snap.created_at);
         const start = new Date(startDate);
         const end = new Date(endDate);
-
-        // Verificamos que la fecha del snap esté dentro del rango
         return snapDate >= start && snapDate <= end;
       }
 
@@ -94,7 +79,13 @@ const TwitSnapsView = () => {
     <section className="section twitsnap-view">
       <h2>Lista de TwitSnaps</h2>
 
-      {loading && <p>Cargando TwitSnaps...</p>}
+      {loading && (
+        <div className="loading-container">
+          <p>Cargando TwitSnaps...</p>
+          <div className="loading-circle"></div> {/* Círculo de carga */}
+        </div>
+      )}
+
       {error && <p className="error">{error}</p>}
 
       {!loading && !error && (
