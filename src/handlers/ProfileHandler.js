@@ -59,3 +59,27 @@ export async function getAllUsers() {
         return { success: false, message: 'Error al conectar con el servidor.' };
     }
 }
+
+
+export const getProfileByUsername = async (username) => {
+    try {
+        const response = await fetch(`${API_URL}/profiles/by-username?username=${username}`, { 
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to fetch user profile');
+        }
+
+        const profile = await response.json(); // Asumiendo que el API devuelve el perfil completo
+
+        return { success: true, profile: profile }; // Devuelve el perfil completo
+    } catch (error) {
+        console.error('Error al obtener el perfil por nombre de usuario:', error);
+        return { success: false, message: error.message };
+    }
+};

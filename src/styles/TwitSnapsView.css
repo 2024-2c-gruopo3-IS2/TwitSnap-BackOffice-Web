@@ -87,10 +87,6 @@
     width: 10%;
 }
 
-.twitsnap-view th:nth-child(5), .twitsnap-view td:nth-child(5) {
-    width: 15%;
-}
-
 .search-bar {
     display: flex;
     align-items: center;

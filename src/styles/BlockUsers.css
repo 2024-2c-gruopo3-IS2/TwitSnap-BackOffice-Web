@@ -9,6 +9,7 @@ th, td {
     text-align: center;
     border-bottom: 1px solid #2e2e2e;
     width: 25%; /* Establece un ancho fijo para las columnas */
+    align-items: center;
 }
 
 th:nth-child(1), td:nth-child(1) {
@@ -27,6 +28,26 @@ th:nth-child(4), td:nth-child(4) {
     width: 150px; /* Fija el tamaño de la columna de acción */
 }
 
+th:nth-child(5), td:nth-child(5) {
+    width: 50px; /* Fija el tamaño de la columna de acción */
+}
+
+
 tr:hover {
     background-color: #0d8ae8;
+}
+
+.details-button {
+    background: transparent; /* Sin fondo */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    width: 40px; /* Ancho del botón */
+    height: 40px; /* Alto del botón */
+    padding: 0; /* Sin padding */
+}
+
+.details-image {
+    width: 100%; /* Ocupa todo el ancho del botón */
+    height: 100%; /* Ocupa todo el alto del botón */
+    object-fit: cover; /* Ajusta la imagen sin deformar */
 }

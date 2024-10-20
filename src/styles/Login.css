@@ -1,18 +1,27 @@
 .login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 80px;
+  display: flex; /* Cambiado a flex para permitir la alineación horizontal */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  height: 100vh; /* Asegura que el contenedor ocupe toda la altura de la ventana */
+}
+
+.background-image {
+  width: 40%; /* Ajusta el ancho según lo necesites */
+  height: auto; /* Mantiene la proporción de la imagen */
+  object-fit: cover; /* Asegura que la imagen cubra el área sin deformarse */
+  margin-right: 25px; /* Espacio entre la imagen y el bloque de login */
 }
 
 .login-box {
-  background-color: #1e1e1e; /* Fondo del contenedor más oscuro */
+  background-color: rgba(30, 30, 30, 0.9); /* Fondo del contenedor más oscuro con opacidad */
   padding: 40px;
   border-radius: 8px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Sombra más pronunciada */
   width: 100%;
-  max-width: 400px;
+  max-width: 400px; /* Limita el ancho máximo de la caja */
   text-align: center;
+  margin-right: 250px; /* Espacio entre la imagen y el bloque de login */
+
 }
 
 .login-form input {
