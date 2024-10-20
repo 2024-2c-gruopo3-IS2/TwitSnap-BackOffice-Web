@@ -9,6 +9,8 @@ const TwitSnapsView = () => {
   const [filteredSnaps, setFilteredSnaps] = useState([]);
   const [filterType, setFilterType] = useState('message');
   const [searchTerm, setSearchTerm] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedSnap, setSelectedSnap] = useState(null); 
@@ -42,13 +44,25 @@ const TwitSnapsView = () => {
     }
   }, []);
 
+  // Filtro que se activa cuando el término de búsqueda o las fechas cambian
   useEffect(() => {
     const filtered = twitSnaps.filter((snap) => {
       const value = snap[filterType]?.toString().toLowerCase() || '';
+
+      if (filterType === 'created_at' && startDate && endDate) {
+        // Convertimos las fechas a objetos Date
+        const snapDate = new Date(snap.created_at);
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+
+        // Verificamos que la fecha del snap esté dentro del rango
+        return snapDate >= start && snapDate <= end;
+      }
+
       return value.includes(searchTerm.toLowerCase());
     });
     setFilteredSnaps(filtered);
-  }, [searchTerm, filterType, twitSnaps]);
+  }, [searchTerm, filterType, startDate, endDate, twitSnaps]);
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -56,6 +70,14 @@ const TwitSnapsView = () => {
 
   const handleFilterChange = (type) => {
     setFilterType(type);
+  };
+
+  const handleStartDateChange = (e) => {
+    setStartDate(e.target.value);
+  };
+
+  const handleEndDateChange = (e) => {
+    setEndDate(e.target.value);
   };
 
   const handleOpenModal = (snap) => {
@@ -100,10 +122,23 @@ const TwitSnapsView = () => {
             <button className={filterType === 'username' ? 'active' : ''} onClick={() => handleFilterChange('username')}>
               Autor
             </button>
-            <button className={filterType === 'email' ? 'active' : ''} onClick={() => handleFilterChange('email')}>
+            <button className={filterType === 'created_at' ? 'active' : ''} onClick={() => handleFilterChange('created_at')}>
               Fecha
             </button>
           </div>
+
+          {filterType === 'created_at' && (
+            <div className="date-range-filter">
+              <label>
+                Desde:
+                <input type="date" value={startDate} onChange={handleStartDateChange} />
+              </label>
+              <label>
+                Hasta:
+                <input type="date" value={endDate} onChange={handleEndDateChange} />
+              </label>
+            </div>
+          )}
 
           <table>
             <thead>

@@ -69,6 +69,7 @@
     background-color: #0d8ae8;
 }
 
+
 /* Ajustar anchos de columna */
 .twitsnap-view th:nth-child(1), .twitsnap-view td:nth-child(1) {
     width: 35%;
@@ -132,3 +133,57 @@
     height: 100%; /* La imagen ocupa todo el espacio del botón */
 }
 
+.date-range-filter {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .date-range-filter label {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    color: white;
+  }
+  
+  .date-range-filter input {
+    padding: 8px;
+    background-color: #2e2e2e;
+    border: 1px solid #444;
+    border-radius: 4px;
+    color: white;
+  }
+  
+  .date-range-filter input::placeholder {
+    color: #888;
+  }
+  
+  .date-range-filter input:hover,
+  .date-range-filter input:focus {
+    background-color: #3a3a3a;
+    border-color: #0d8ae8;
+  }
+
+.twitsnap-view table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.twitsnap-view th,
+.twitsnap-view td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #2e2e2e;
+}
+
+.twitsnap-view th {
+    background-color: #1e1e1e; /* Fondo oscuro para resaltar */
+    font-weight: bold; /* Negrita para destacar */
+}
+
+.twitsnap-view tr:hover {
+    background-color: #0d8ae8;
+    color: white; /* Para que el texto se vea bien sobre el fondo azul */
+}
+
+  
