@@ -14,6 +14,7 @@ h2 {
 table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: auto; /* Permite que las columnas se ajusten automáticamente */
 }
 
 th, td {
@@ -21,6 +22,7 @@ th, td {
     text-align: left;
     border-bottom: 1px solid #2e2e2e;
     vertical-align: middle;
+    min-width: 50px; /* Establece un ancho mínimo para asegurar un tamaño mínimo adecuado */
 }
 
 th {
@@ -38,6 +40,11 @@ td {
     overflow: hidden;
 }
 
+td:nth-child(2) {
+    min-width: 100px; 
+    max-width: 100px; 
+}
+
 .details-col {
     text-align: center;
     width: 40px; /* Mantiene la columna lo más pequeña posible */
@@ -51,6 +58,8 @@ img {
     margin: 0 auto;
 }
 
+
+
 @media (max-width: 768px) {
     td, th {
         font-size: 14px;
@@ -62,20 +71,63 @@ img {
     justify-content: center;
     align-items: center;
     height: 100px; /* Puedes ajustar la altura según tu diseño */
-  }
-  
-  .loading-circle {
+}
+
+.loading-circle {
     border: 4px solid rgba(0, 0, 0, 0.1);
     border-left-color: #1da1f2;
     border-radius: 50%;
     width: 40px;
     height: 40px;
     animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
+}
+
+@keyframes spin {
     to {
       transform: rotate(360deg);
     }
+}
+
+.styled-select {
+    width: 100%; /* Mantiene el ancho completo */
+    padding: 9px; /* Ajusta el padding para que coincida con el input de búsqueda */
+    border: 1px solid #444; /* Coincide con el borde del input */
+    border-radius: 4px; /* Mantiene el mismo borde redondeado */
+    background-color: #2e2e2e; /* Igualar el fondo del input */
+    color: white; /* Igualar el color del texto */
+    appearance: none; /* Elimina el estilo por defecto del navegador */
+    cursor: pointer; /* Mantiene el cursor de puntero */
+    font-size: 16px; /* Cambiado a 16px para aumentar el tamaño de fuente */
+    margin-left: 8px; /* Espacio a la izquierda del select */
+}
+
+.styled-select::placeholder {
+    color: #888; /* Color del placeholder, aunque no se aplicará aquí ya que el select no tiene placeholder */
+}
+
+.styled-select:hover {
+    border-color: #1da1f2; /* Cambia el color del borde al pasar el mouse */
+}
+
+.styled-select:focus {
+    outline: none; /* Elimina el borde por defecto del navegador al enfocar */
+    border-color: #1da1f2; /* Color del borde al enfocar */
+    box-shadow: 0 0 5px rgba(29, 161, 242, 0.5); /* Sombra al enfocar */
+}
+
+.date-range-filter {
+    display: flex;
+    gap: 10px; /* Espacio entre los selectores de fecha, puedes ajustarlo a tu gusto */
+    margin-bottom: 0; /* Asegúrate de que no haya margen inferior */
   }
   
+  .filter-buttons {
+    display: flex;
+    gap: 10px; /* Espacio entre los botones de filtro */
+    margin-top: 5px; /* Ajusta según sea necesario */
+  }
+  
+  /* Asegúrate de que no haya márgenes adicionales en las etiquetas de los selectores */
+  .date-range-filter label {
+    margin: 0; /* Elimina el margen por defecto */
+  }

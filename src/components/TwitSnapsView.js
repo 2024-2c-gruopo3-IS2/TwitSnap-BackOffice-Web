@@ -36,18 +36,21 @@ const TwitSnapsView = () => {
   useEffect(() => {
     const filtered = twitSnaps.filter((snap) => {
       const value = snap[filterType]?.toString().toLowerCase() || '';
-
+  
       if (filterType === 'created_at' && startDate && endDate) {
-        const snapDate = new Date(snap.created_at);
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-        return snapDate >= start && snapDate <= end;
+        // Convertir las fechas a formato solo de día
+        const snapDate = new Date(snap.created_at).setHours(0, 0, 0, 0); 
+        const start = new Date(startDate).setHours(0, 0, 0, 0);
+        const end = new Date(endDate).setHours(23, 59, 59, 999); 
+  
+        return snapDate > start && snapDate <= end;
       }
-
+  
       return value.includes(searchTerm.toLowerCase());
     });
     setFilteredSnaps(filtered);
   }, [searchTerm, filterType, startDate, endDate, twitSnaps]);
+  
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
