@@ -131,3 +131,23 @@ img {
   .date-range-filter label {
     margin: 0; /* Elimina el margen por defecto */
   }
+
+  .search-bar {
+    display: flex;
+    align-items: center; /* Alinea verticalmente los elementos */
+    margin-bottom: 15px; /* Ajusta según sea necesario */
+  }
+  
+  .search-icon {
+    display: flex;
+    align-items: center;
+    margin-right: 5px; /* Espacio entre el icono y el campo de texto */
+  }
+  
+  .search-icon-img {
+    width: 25px; /* Tamaño fijo */
+    height: 25px; /* Tamaño fijo */
+  }
+  
+
+  

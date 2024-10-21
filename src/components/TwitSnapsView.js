@@ -43,7 +43,7 @@ const TwitSnapsView = () => {
         const start = new Date(startDate).setHours(0, 0, 0, 0);
         const end = new Date(endDate).setHours(23, 59, 59, 999); 
   
-        return snapDate > start && snapDate <= end;
+        return snapDate >= start && snapDate <= end;
       }
   
       return value.includes(searchTerm.toLowerCase());
@@ -58,6 +58,12 @@ const TwitSnapsView = () => {
 
   const handleFilterChange = (type) => {
     setFilterType(type);
+    // Reiniciar los términos de búsqueda y fechas al cambiar el filtro
+    if (type !== 'created_at') {
+      setStartDate('');
+      setEndDate('');
+      setSearchTerm('');
+    }
   };
 
   const handleStartDateChange = (e) => {
@@ -92,33 +98,24 @@ const TwitSnapsView = () => {
 
       {!loading && !error && (
         <>
-          <div className="search-bar">
-            <span className="search-icon">
-              <img
-                src="https://www.citypng.com/public/uploads/preview/magnifying-glass-search-white-icon-transparent-png-701751694974238f0vl5bmpat.png"
-                alt="Lupa"
-                style={{ width: '25px', height: '25px' }}
+          {/* Mostrar la barra de búsqueda solo si el filtro no es 'created_at' */}
+          {filterType !== 'created_at' && (
+            <div className="search-bar">
+              <span className="search-icon">
+                <img
+                  src="https://www.citypng.com/public/uploads/preview/magnifying-glass-search-white-icon-transparent-png-701751694974238f0vl5bmpat.png"
+                  alt="Lupa"
+                  style={{ width: '25px', height: '25px' }}
+                />
+              </span>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                placeholder={`Buscar...`}
               />
-            </span>
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              placeholder={`Buscar...`}
-            />
-          </div>
-
-          <div className="filter-buttons">
-            <button className={filterType === 'message' ? 'active' : ''} onClick={() => handleFilterChange('message')}>
-              Mensaje
-            </button>
-            <button className={filterType === 'username' ? 'active' : ''} onClick={() => handleFilterChange('username')}>
-              Autor
-            </button>
-            <button className={filterType === 'created_at' ? 'active' : ''} onClick={() => handleFilterChange('created_at')}>
-              Fecha
-            </button>
-          </div>
+            </div>
+          )}
 
           {filterType === 'created_at' && (
             <div className="date-range-filter">
@@ -132,6 +129,19 @@ const TwitSnapsView = () => {
               </label>
             </div>
           )}
+
+          <div className="filter-buttons">
+            <button className={filterType === 'message' ? 'active' : ''} onClick={() => handleFilterChange('message')}>
+              Mensaje
+            </button>
+            <button className={filterType === 'username' ? 'active' : ''} onClick={() => handleFilterChange('username')}>
+              Autor
+            </button>
+            <button className={filterType === 'created_at' ? 'active' : ''} onClick={() => handleFilterChange('created_at')}>
+              Fecha
+            </button>
+          </div>
+
 
           <table>
             <thead>

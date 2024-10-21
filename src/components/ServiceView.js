@@ -1,8 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { fetchServices, fetchServiceStatus, getServiceDescription, getServiceStatus, getServiceCreationDate } from '../handlers/ServiceViewHandler';
+import {
+  fetchServices,
+  fetchServiceStatus,
+  getServiceDescription,
+  getServiceStatus,
+  getServiceCreationDate,
+} from '../handlers/ServiceViewHandler';
 import '../styles/ServiceView.css';
 import ServiceModal from './ServiceModal';
 import moreDetailsImage from '../assets/images/moreDetails.png';
+
+// Componente para el indicador de estado
+const StatusIndicator = ({ status }) => {
+  const isActive = status === 'Activo';
+  const indicatorStyle = {
+    display: 'inline-block',
+    width: '10px',
+    height: '10px',
+    borderRadius: '50%',
+    backgroundColor: isActive ? '#4CAF50' : '#F44336',
+    marginRight: '5px',
+  };
+
+  return <span style={indicatorStyle}></span>;
+};
 
 const ServiceView = () => {
   const [servicesInfo, setServicesInfo] = useState([]);
@@ -48,8 +69,10 @@ const ServiceView = () => {
         })
       );
 
-      setServicesInfo(serviceInfo);
-      setFilteredServices(serviceInfo);
+      // Ordenar los servicios por nombre en orden alfabético
+      const sortedServices = serviceInfo.sort((a, b) => a.name.localeCompare(b.name));
+      setServicesInfo(sortedServices);
+      setFilteredServices(sortedServices);
       setLoading(false);
     };
 
@@ -75,7 +98,10 @@ const ServiceView = () => {
 
       return value.includes(searchTerm.toLowerCase());
     });
-    setFilteredServices(filtered);
+
+    // Ordenar los servicios filtrados por nombre en orden alfabético
+    const sortedFiltered = filtered.sort((a, b) => a.name.localeCompare(b.name));
+    setFilteredServices(sortedFiltered);
   }, [searchTerm, filterType, startDate, endDate, servicesInfo]);
 
   // Funciones para manejar los filtros
@@ -90,7 +116,7 @@ const ServiceView = () => {
   return (
     <section className="section">
       <h2>Servicios</h2>
-  
+
       {loading ? (
         <div className="loading-container">
           <div className="loading-circle"></div>
@@ -115,7 +141,7 @@ const ServiceView = () => {
                   <img
                     src="https://www.citypng.com/public/uploads/preview/magnifying-glass-search-white-icon-transparent-png-701751694974238f0vl5bmpat.png"
                     alt="Lupa"
-                    style={{ width: '25px', height: '25px' }}
+                    className="search-icon-img"
                   />
                 </span>
                 {filterType === 'status' ? (
@@ -137,7 +163,7 @@ const ServiceView = () => {
               </>
             )}
           </div>
-  
+
           <div className="filter-buttons">
             <button className={filterType === 'name' ? 'active' : ''} onClick={() => handleFilterChange('name')}>
               Nombre
@@ -149,7 +175,7 @@ const ServiceView = () => {
               Fecha
             </button>
           </div>
-  
+
           <table>
             <thead>
               <tr>
@@ -164,7 +190,10 @@ const ServiceView = () => {
               {filteredServices.map((service, index) => (
                 <tr key={index}>
                   <td>{service.name}</td>
-                  <td>{service.status}</td>
+                  <td>
+                    <StatusIndicator status={service.status} />
+                    {service.status}
+                  </td>
                   <td>{service.createdAt}</td>
                   <td>{service.description}</td>
                   <td className="details-col">
@@ -176,7 +205,7 @@ const ServiceView = () => {
               ))}
             </tbody>
           </table>
-  
+
           {isModalOpen && selectedService && (
             <ServiceModal service={selectedService} onClose={handleCloseModal} />
           )}
@@ -184,6 +213,6 @@ const ServiceView = () => {
       )}
     </section>
   );
-};  
+};
 
 export default ServiceView;
