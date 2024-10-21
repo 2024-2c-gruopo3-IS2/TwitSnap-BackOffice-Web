@@ -27,7 +27,7 @@ const UserDetailsModal = ({ user, onClose }) => {
     }, [user.username]); // Dependencia en el username para volver a ejecutar si cambia
 
     if (loading) {
-        return <div>Cargando...</div>; // Mensaje de carga
+        return <div></div>; // Mensaje de carga
     }
 
     if (error) {
