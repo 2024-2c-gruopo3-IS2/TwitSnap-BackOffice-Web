@@ -77,11 +77,10 @@ const TwitSnapsView = () => {
 
   return (
     <section className="section twitsnap-view">
-      <h2>Lista de TwitSnaps</h2>
+      <h2>TwitSnaps</h2>
 
       {loading && (
         <div className="loading-container">
-          <p>Cargando TwitSnaps...</p>
           <div className="loading-circle"></div> {/* Círculo de carga */}
         </div>
       )}

@@ -8,6 +8,7 @@ const ServiceView = () => {
   const [servicesInfo, setServicesInfo] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true); // Nuevo estado para manejar el loading
 
   const handleOpenModal = (service) => {
     setSelectedService(service);
@@ -36,6 +37,7 @@ const ServiceView = () => {
 
   useEffect(() => {
     const loadServices = async () => {
+      setLoading(true); // Inicia el loading
       const fetchedServices = await fetchServices();
 
       const serviceInfo = await Promise.all(
@@ -55,6 +57,7 @@ const ServiceView = () => {
       );
 
       setServicesInfo(serviceInfo);
+      setLoading(false); // Finaliza el loading
     };
 
     loadServices();
@@ -63,37 +66,43 @@ const ServiceView = () => {
   return (
     <section className="section">
       <h2>Servicios</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Servicio</th>
-            <th>Estado</th>
-            <th>Creado en</th>
-            <th>Descripción</th>
-            <th>Detalles</th>            
-          </tr>
-        </thead>
-        <tbody>
-          {servicesInfo.map((service, index) => (
-            <tr key={index}>
-              <td>{service.name}</td>
-              <td>{service.status}</td>
-              <td>{service.createdAt}</td>
-              <td>{getServiceDescription(service.name)}</td>
-              <td className="details-col">
-                    <button onClick={() => handleOpenModal(service)}>
-                      <img src={moreDetailsImage} alt="Detalles" />
-                    </button>
-              </td>
+
+      {loading ? (
+        <div className="loading-container">
+          <div className="loading-circle"></div> {/* Círculo de carga */}
+        </div>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>Servicio</th>
+              <th>Estado</th>
+              <th>Creado en</th>
+              <th>Descripción</th>
+              <th>Detalles</th>            
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {servicesInfo.map((service, index) => (
+              <tr key={index}>
+                <td>{service.name}</td>
+                <td>{service.status}</td>
+                <td>{service.createdAt}</td>
+                <td>{getServiceDescription(service.name)}</td>
+                <td className="details-col">
+                      <button onClick={() => handleOpenModal(service)}>
+                        <img src={moreDetailsImage} alt="Detalles" />
+                      </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
 
       {isModalOpen && selectedService && (
         <ServiceModal service={selectedService} onClose={handleCloseModal} />
       )}
-
     </section>
   );
 };

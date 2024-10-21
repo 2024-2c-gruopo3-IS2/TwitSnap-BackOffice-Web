@@ -182,4 +182,27 @@
     color: white; /* Para que el texto se vea bien sobre el fondo azul */
 }
 
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .loading-circle {
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    border-top: 5px solid #1da1f2;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-top: 20px;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+
   

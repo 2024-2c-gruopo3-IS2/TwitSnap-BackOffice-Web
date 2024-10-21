@@ -23,17 +23,17 @@ const StatusIndicator = ({ isBlocked }) => (
 
 const BlockUsers = () => {
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Estado de carga general
   const [loadingUsers, setLoadingUsers] = useState({});
   const [error, setError] = useState(null);
-  const [selectedUser, setSelectedUser] = useState(null); // Usuario seleccionado
-  const [isModalOpen, setIsModalOpen] = useState(false); // Control del modal
+  const [selectedUser, setSelectedUser] = useState(null); 
+  const [isModalOpen, setIsModalOpen] = useState(false); 
 
   const fetchUsers = async () => {
+    setLoading(true); // Mostrar círculo de carga
     if (usersCache) {
-      console.log("Using cached users data");
       setUsers(usersCache);
-      setLoading(false);
+      setLoading(false); 
       return;
     }
 
@@ -58,7 +58,7 @@ const BlockUsers = () => {
     } else {
       setError(resultUsers.message);
     }
-    setLoading(false);
+    setLoading(false); // Ocultar círculo de carga
   };
 
   useEffect(() => {
@@ -95,72 +95,75 @@ const BlockUsers = () => {
     setIsModalOpen(false);
   };
 
-  if (loading) {
-    return <div>Cargando Usuarios...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
   return (
     <section className="section">
       <h2>Administrar Usuarios</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Nombre de Usuario</th>
-            <th>Email</th>
-            <th>Estado</th>
-            <th>Acción</th>
-            <th>Detalles</th> {/* Nueva columna de detalles */}
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.username}>
-              <td>{user.username}</td>
-              <td>{user.email}</td>
-              <td>
-                <StatusIndicator isBlocked={user.isBlocked} />
-                {user.isBlocked ? 'Bloqueado' : 'Activo'}
-              </td>
-              <td>
-                <button
-                  onClick={() => toggleUserBlock(user)}
-                  disabled={loadingUsers[user.email]}
-                  style={{
-                    backgroundColor: user.isBlocked ? '#4CAF50' : '#F44336',
-                    color: 'white',
-                    padding: '8px 16px',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                  }}
-                >
-                  {loadingUsers[user.email]
-                    ? 'Procesando...'
-                    : user.isBlocked
-                    ? 'Desbloquear'
-                    : 'Bloquear'}
-                </button>
-              </td>
-              <td>
-                <button onClick={() => openModal(user)} className="details-button">
-                  <img
-                    src={userDetailsImage}
-                    alt="Detalles"
-                    className="details-image"
-                  />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
 
-      {isModalOpen && selectedUser && (
-        <UserDetailsModal user={selectedUser} onClose={closeModal} />
+      {loading && (
+        <div className="loading-container">
+          <div className="loading-circle"></div> {/* Círculo de carga */}
+        </div>
+      )}
+
+      {!loading && (
+        <>
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre de Usuario</th>
+                <th>Email</th>
+                <th>Estado</th>
+                <th>Acción</th>
+                <th>Detalles</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user.username}>
+                  <td>{user.username}</td>
+                  <td>{user.email}</td>
+                  <td>
+                    <StatusIndicator isBlocked={user.isBlocked} />
+                    {user.isBlocked ? 'Bloqueado' : 'Activo'}
+                  </td>
+                  <td>
+                    <button
+                      onClick={() => toggleUserBlock(user)}
+                      disabled={loadingUsers[user.email]}
+                      style={{
+                        backgroundColor: user.isBlocked ? '#4CAF50' : '#F44336',
+                        color: 'white',
+                        padding: '8px 16px',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {loadingUsers[user.email]
+                        ? 'Procesando...'
+                        : user.isBlocked
+                        ? 'Desbloquear'
+                        : 'Bloquear'}
+                    </button>
+                  </td>
+                  <td>
+                    <button onClick={() => openModal(user)} className="details-button">
+                      <img
+                        src={userDetailsImage}
+                        alt="Detalles"
+                        className="details-image"
+                      />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {isModalOpen && selectedUser && (
+            <UserDetailsModal user={selectedUser} onClose={closeModal} />
+          )}
+        </>
       )}
     </section>
   );
