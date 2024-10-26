@@ -8,7 +8,6 @@ th, td {
     padding: 12px;
     text-align: center;
     border-bottom: 1px solid #2e2e2e;
-    width: 25%; /* Establece un ancho fijo para las columnas */
     align-items: center;
 }
 
@@ -21,11 +20,11 @@ th:nth-child(2), td:nth-child(2) {
 }
 
 th:nth-child(3), td:nth-child(3) {
-    width: 100px; /* Fija el tamaño de la columna de estado */
+    width: 60px; /* Fija el tamaño de la columna de estado */
 }
 
 th:nth-child(4), td:nth-child(4) {
-    width: 150px; /* Fija el tamaño de la columna de acción */
+    width: 100px; /* Fija el tamaño de la columna de acción */
 }
 
 th:nth-child(5), td:nth-child(5) {
@@ -44,6 +43,7 @@ tr:hover {
     width: 40px; /* Ancho del botón */
     height: 40px; /* Alto del botón */
     padding: 0; /* Sin padding */
+    margin-left: 25px; /* Margen izquierdo */
 }
 
 .details-image {

@@ -14,40 +14,11 @@ h2 {
 table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: auto; /* Permite que las columnas se ajusten automáticamente */
 }
 
-th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #2e2e2e;
-    vertical-align: middle;
-    min-width: 50px; /* Establece un ancho mínimo para asegurar un tamaño mínimo adecuado */
-}
-
-th {
-    background-color: #2e2e2e;
-    color: white;
-}
-
-tr:hover {
-    background-color: #0d8ae8;
-}
-
-td {
-    word-wrap: break-word; /* Permite que el texto se ajuste en múltiples líneas */
-    white-space: normal; /* Permite que el contenido largo se divida en líneas */
-    overflow: hidden;
-}
-
-td:nth-child(2) {
-    min-width: 100px; 
-    max-width: 100px; 
-}
 
 .details-col {
     text-align: center;
-    width: 40px; /* Mantiene la columna lo más pequeña posible */
     padding: 0; /* Elimina el padding adicional para reducir el tamaño de la celda */
 }
 
@@ -56,14 +27,6 @@ img {
     height: auto;
     display: block;
     margin: 0 auto;
-}
-
-
-
-@media (max-width: 768px) {
-    td, th {
-        font-size: 14px;
-    }
 }
 
 .loading-container {
@@ -87,6 +50,7 @@ img {
       transform: rotate(360deg);
     }
 }
+
 
 .styled-select {
     width: 100%; /* Mantiene el ancho completo */

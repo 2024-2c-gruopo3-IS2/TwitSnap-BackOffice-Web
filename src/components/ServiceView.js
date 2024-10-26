@@ -180,9 +180,9 @@ const ServiceView = () => {
             <thead>
               <tr>
                 <th>Servicio</th>
-                <th>Estado</th>
-                <th>Creado en</th>
                 <th>Descripción</th>
+                <th>Creado en</th>
+                <th>Estado</th>
                 <th>Detalles</th>
               </tr>
             </thead>
@@ -190,12 +190,12 @@ const ServiceView = () => {
               {filteredServices.map((service, index) => (
                 <tr key={index}>
                   <td>{service.name}</td>
+                  <td>{service.description}</td>
+                  <td>{service.createdAt}</td>
                   <td>
                     <StatusIndicator status={service.status} />
                     {service.status}
                   </td>
-                  <td>{service.createdAt}</td>
-                  <td>{service.description}</td>
                   <td className="details-col">
                     <button onClick={() => handleOpenModal(service)}>
                       <img src={moreDetailsImage} alt="Detalles" />

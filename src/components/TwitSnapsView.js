@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchAllSnaps } from '../handlers/TwitSnapsHandler';
+import { fetchAllSnaps, blockSnap, unblockSnap } from '../handlers/TwitSnapsHandler';
 import '../styles/TwitSnapsView.css';
 import TwitSnapModal from './TwitSnapModal'; 
 import moreDetailsImage from '../assets/images/moreDetails.png'; 
@@ -15,6 +15,7 @@ const TwitSnapsView = () => {
   const [loading, setLoading] = useState(true);
   const [selectedSnap, setSelectedSnap] = useState(null); 
   const [isModalOpen, setIsModalOpen] = useState(false);  
+  const [loadingSnaps, setLoadingSnaps] = useState({}); // Estado de carga para snaps
 
   useEffect(() => {
     const getSnaps = async () => {
@@ -32,25 +33,19 @@ const TwitSnapsView = () => {
     getSnaps();
   }, []);
 
-  // Filtro que se activa cuando el término de búsqueda o las fechas cambian
   useEffect(() => {
     const filtered = twitSnaps.filter((snap) => {
       const value = snap[filterType]?.toString().toLowerCase() || '';
-  
       if (filterType === 'created_at' && startDate && endDate) {
-        // Convertir las fechas a formato solo de día
         const snapDate = new Date(snap.created_at).setHours(0, 0, 0, 0); 
         const start = new Date(startDate).setHours(0, 0, 0, 0);
         const end = new Date(endDate).setHours(23, 59, 59, 999); 
-  
         return snapDate >= start && snapDate <= end;
       }
-  
       return value.includes(searchTerm.toLowerCase());
     });
     setFilteredSnaps(filtered);
   }, [searchTerm, filterType, startDate, endDate, twitSnaps]);
-  
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -58,7 +53,6 @@ const TwitSnapsView = () => {
 
   const handleFilterChange = (type) => {
     setFilterType(type);
-    // Reiniciar los términos de búsqueda y fechas al cambiar el filtro
     if (type !== 'created_at') {
       setStartDate('');
       setEndDate('');
@@ -84,6 +78,33 @@ const TwitSnapsView = () => {
     setSelectedSnap(null);
   };
 
+  const handleBlockToggle = async (twitSnap) => {
+    setLoadingSnaps((prevState) => ({ ...prevState, [twitSnap._id]: true })); // Iniciar carga
+
+    let result;
+    if (twitSnap.is_blocked) {
+      result = await unblockSnap(twitSnap._id);
+      if (result.success) {
+        setTwitSnaps(prevSnaps => 
+          prevSnaps.map(snap => 
+            snap._id === twitSnap._id ? { ...snap, is_blocked: false } : snap
+          )
+        );
+      }
+    } else {
+      result = await blockSnap(twitSnap._id, twitSnap.email);
+      if (result.success) {
+        setTwitSnaps(prevSnaps => 
+          prevSnaps.map(snap => 
+            snap._id === twitSnap._id ? { ...snap, is_blocked: true } : snap
+          )
+        );
+      }
+    }
+
+    setLoadingSnaps((prevState) => ({ ...prevState, [twitSnap._id]: false })); // Finalizar carga
+  };
+
   return (
     <section className="section twitsnap-view">
       <h2>TwitSnaps</h2>
@@ -98,7 +119,6 @@ const TwitSnapsView = () => {
 
       {!loading && !error && (
         <>
-          {/* Mostrar la barra de búsqueda solo si el filtro no es 'created_at' */}
           {filterType !== 'created_at' && (
             <div className="search-bar">
               <span className="search-icon">
@@ -142,7 +162,6 @@ const TwitSnapsView = () => {
             </button>
           </div>
 
-
           <table>
             <thead>
               <tr>
@@ -150,6 +169,7 @@ const TwitSnapsView = () => {
                 <th className="username-col">Autor</th>
                 <th className="date-col">Fecha de Creación</th>
                 <th className="details-col">Detalles</th> 
+                <th className="status-col">Estado</th>
               </tr>
             </thead>
             <tbody>
@@ -158,6 +178,15 @@ const TwitSnapsView = () => {
                   <td className="message-col">{twitSnap.message}</td>
                   <td className="username-col">{twitSnap.username}</td>
                   <td className="date-col">{new Date(twitSnap.created_at).toLocaleString()}</td>
+                  <td className="status-col">
+                    <button
+                      className={twitSnap.is_blocked ? 'blocked' : 'unblocked'}
+                      onClick={() => handleBlockToggle(twitSnap)}
+                      disabled={loadingSnaps[twitSnap._id]} // Deshabilitar el botón durante la carga
+                    >
+                      {loadingSnaps[twitSnap._id] ? 'Procesando...' : (twitSnap.is_blocked ? 'Desbloquear' : 'Bloquear')}
+                    </button>
+                  </td>
                   <td className="details-col">
                     <button onClick={() => handleOpenModal(twitSnap)}>
                       <img src={moreDetailsImage} alt="Detalles" style={{ width: '40px', height: '40px' }} />
@@ -179,7 +208,7 @@ const TwitSnapsView = () => {
                 <p><strong>Likes:</strong> {selectedSnap.likes}</p>
                 <p><strong>Fecha de Creación:</strong> {new Date(selectedSnap.created_at).toLocaleString()}</p>
                 <p><strong>Hastags:</strong> {selectedSnap.hashtags}</p>
-                <p><strong>Tipo:</strong> {selectedSnap.is_private ? 'Privado' : 'Público'}</p>
+                <p><strong>Estado:</strong> {selectedSnap.is_blocked ? 'Bloqueado' : 'Desbloqueado'}</p>
               </div>
             </TwitSnapModal>
           )}

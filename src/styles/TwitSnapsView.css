@@ -72,19 +72,23 @@
 
 /* Ajustar anchos de columna */
 .twitsnap-view th:nth-child(1), .twitsnap-view td:nth-child(1) {
-    width: 35%;
+    width: 100px;
 }
 
 .twitsnap-view th:nth-child(2), .twitsnap-view td:nth-child(2) {
-    width: 15%;
+    width: 100px;
 }
 
 .twitsnap-view th:nth-child(3), .twitsnap-view td:nth-child(3) {
-    width: 25%;
+    width: 100px;
 }
 
 .twitsnap-view th:nth-child(4), .twitsnap-view td:nth-child(4) {
-    width: 10%;
+    width: 50px;
+}
+
+.twitsnap-view th:nth-child(5), .twitsnap-view td:nth-child(5) {
+    width: 25px;
 }
 
 .search-bar {
@@ -121,7 +125,7 @@
     cursor: pointer; /* Cambia el cursor a pointer */
     width: 40px; /* Asegúrate que el tamaño coincida con la imagen */
     height: 40px; /* Asegúrate que el tamaño coincida con la imagen */
-    margin-left: 20px; /* Mover el botón 20 píxeles a la izquierda */
+    margin-left: 25px;
 }
 
 .details-col img {
@@ -204,5 +208,24 @@
     100% { transform: rotate(360deg); }
   }
   
+  .status-col .unblocked {
+    background-color: #F44336;
 
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+
+  /* Botón cuando el TwitSnap está bloqueado */
+  .status-col .blocked {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
   
