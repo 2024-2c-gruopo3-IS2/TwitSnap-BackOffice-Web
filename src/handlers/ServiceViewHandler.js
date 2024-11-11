@@ -30,7 +30,7 @@ export const fetchServices = async () => {
   }
 };
 
-export const fetchServiceStatus = async (serviceName) => {
+export const fetchService = async (serviceName) => {
   const token = localStorage.getItem('token');
 
   if (!token) {
@@ -50,6 +50,9 @@ export const fetchServiceStatus = async (serviceName) => {
       throw new Error('Error al obtener el estado del servicio');
     }
     const data = await response.json();
+
+    console.log('Service status:', data.status);
+
     return {
       status: data.status, 
       createdAt: data.createdAt,
@@ -64,6 +67,60 @@ export const fetchServiceStatus = async (serviceName) => {
     return null;
   }
 };
+
+export const suspendService = async (serviceName) => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    console.error('Token not found');
+    return false;
+  }
+
+  try {
+    const response = await fetch(`${BASE_URL}/services/${serviceName}/suspend`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'token': token,
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Error al suspender el servicio');
+    }
+    console.log('Service suspended'); 
+    return true;
+  } catch (error) {
+    console.error('Error suspending service:', error);
+    return false;
+  }
+}
+
+export const resumeService = async (serviceName) => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    console.error('Token not found');
+    return false;
+  }
+
+  try {
+    const response = await fetch(`${BASE_URL}/services/${serviceName}/resume`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'token': token,
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Error al reanudar el servicio');
+    }
+    console.log('Service resumed');
+    return true;
+  } catch (error) {
+    console.error('Error resuming service:', error);
+    return false;
+  }
+}
 
 // Función para traducir el estado del servicio
 export const getServiceStatus = (status) => {

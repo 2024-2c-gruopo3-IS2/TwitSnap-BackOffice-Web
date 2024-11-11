@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
   fetchServices,
-  fetchServiceStatus,
+  fetchService,
   getServiceDescription,
   getServiceStatus,
   getServiceCreationDate,
+  suspendService,
+  resumeService,
 } from '../handlers/ServiceViewHandler';
 import '../styles/ServiceView.css';
 import ServiceModal from './ServiceModal';
@@ -31,12 +33,14 @@ const ServiceView = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [loadingService, setLoadingService] = useState(null); // Estado para controlar la carga de un servicio específico
 
-  // Estados para los filtros
   const [filterType, setFilterType] = useState('name');
   const [searchTerm, setSearchTerm] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+
+  const protectedServices = ['auth-microservice', 'metrics-microservice'];
 
   const handleOpenModal = (service) => {
     setSelectedService(service);
@@ -48,6 +52,33 @@ const ServiceView = () => {
     setIsModalOpen(false);
   };
 
+  const toggleServiceStatus = (serviceName) => {
+    const service = servicesInfo.find((service) => service.name === serviceName);
+    const action = service.status === 'Activo' ? suspendService : resumeService;
+
+    setLoadingService(serviceName); // Inicia la carga para el servicio específico
+
+    action(serviceName)
+      .then((success) => {
+        if (success) {
+          const updatedServices = servicesInfo.map((service) => {
+            if (service.name === serviceName) {
+              service.status = service.status === 'Activo' ? 'Suspendido' : 'Activo';
+            }
+            return service;
+          });
+
+          setServicesInfo(updatedServices);
+        }
+      })
+      .catch((error) => {
+        console.error('Error toggling service status:', error);
+      })
+      .finally(() => {
+        setLoadingService(null); // Finaliza la carga
+      });
+  };
+
   useEffect(() => {
     const loadServices = async () => {
       setLoading(true);
@@ -55,7 +86,7 @@ const ServiceView = () => {
 
       const serviceInfo = await Promise.all(
         fetchedServices.map(async (service) => {
-          const statusData = await fetchServiceStatus(service);
+          const statusData = await fetchService(service);
           return {
             name: service,
             status: getServiceStatus(statusData.status),
@@ -69,7 +100,6 @@ const ServiceView = () => {
         })
       );
 
-      // Ordenar los servicios por nombre en orden alfabético
       const sortedServices = serviceInfo.sort((a, b) => a.name.localeCompare(b.name));
       setServicesInfo(sortedServices);
       setFilteredServices(sortedServices);
@@ -79,7 +109,6 @@ const ServiceView = () => {
     loadServices();
   }, []);
 
-  // Filtro por término de búsqueda o fechas
   useEffect(() => {
     const filtered = servicesInfo.filter((service) => {
       const value = filterType === 'status' ? service.status : service[filterType]?.toString().toLowerCase() || '';
@@ -99,16 +128,14 @@ const ServiceView = () => {
       return value.includes(searchTerm.toLowerCase());
     });
 
-    // Ordenar los servicios filtrados por nombre en orden alfabético
     const sortedFiltered = filtered.sort((a, b) => a.name.localeCompare(b.name));
     setFilteredServices(sortedFiltered);
   }, [searchTerm, filterType, startDate, endDate, servicesInfo]);
 
-  // Funciones para manejar los filtros
   const handleSearchChange = (e) => setSearchTerm(e.target.value);
   const handleFilterChange = (type) => {
     setFilterType(type);
-    setSearchTerm(''); // Resetear el término de búsqueda al cambiar el filtro
+    setSearchTerm('');
   };
   const handleStartDateChange = (e) => setStartDate(e.target.value);
   const handleEndDateChange = (e) => setEndDate(e.target.value);
@@ -176,13 +203,14 @@ const ServiceView = () => {
             </button>
           </div>
 
-          <table>
+          <table className="table-custom">
             <thead>
               <tr>
                 <th>Servicio</th>
                 <th>Descripción</th>
                 <th>Creado en</th>
                 <th>Estado</th>
+                <th>Acción</th>
                 <th>Detalles</th>
               </tr>
             </thead>
@@ -196,8 +224,21 @@ const ServiceView = () => {
                     <StatusIndicator status={service.status} />
                     {service.status}
                   </td>
+                  <td>
+                    {protectedServices.includes(service.name) ? (
+                      <span>Servicio protegido</span>
+                    ) : (
+                      <button
+                        className={service.status === 'Activo' ? 'button-suspended' : 'button-active'}
+                        onClick={() => toggleServiceStatus(service.name)}
+                        disabled={loadingService === service.name} // Deshabilitar el botón mientras se procesa la acción
+                      >
+                        {loadingService === service.name ? 'Procesando...' : (service.status === 'Activo' ? 'Desactivar' : 'Activar')}
+                      </button>
+                    )}
+                  </td>
                   <td className="details-col">
-                    <button onClick={() => handleOpenModal(service)}>
+                    <button className="details-button" onClick={() => handleOpenModal(service)}>
                       <img src={moreDetailsImage} alt="Detalles" />
                     </button>
                   </td>
@@ -205,11 +246,11 @@ const ServiceView = () => {
               ))}
             </tbody>
           </table>
-
-          {isModalOpen && selectedService && (
-            <ServiceModal service={selectedService} onClose={handleCloseModal} />
-          )}
         </>
+      )}
+
+      {isModalOpen && (
+        <ServiceModal service={selectedService} onClose={handleCloseModal} />
       )}
     </section>
   );
