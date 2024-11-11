@@ -40,8 +40,6 @@ const ServiceView = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
-  const protectedServices = ['auth-microservice', 'metrics-microservice'];
-
   const handleOpenModal = (service) => {
     setSelectedService(service);
     setIsModalOpen(true);
@@ -225,17 +223,13 @@ const ServiceView = () => {
                     {service.status}
                   </td>
                   <td>
-                    {protectedServices.includes(service.name) ? (
-                      <span>Servicio protegido</span>
-                    ) : (
-                      <button
-                        className={service.status === 'Activo' ? 'button-suspended' : 'button-active'}
-                        onClick={() => toggleServiceStatus(service.name)}
-                        disabled={loadingService === service.name} // Deshabilitar el botón mientras se procesa la acción
-                      >
-                        {loadingService === service.name ? 'Procesando...' : (service.status === 'Activo' ? 'Desactivar' : 'Activar')}
-                      </button>
-                    )}
+                    <button
+                      className={service.status === 'Activo' ? 'button-suspended' : 'button-active'}
+                      onClick={() => toggleServiceStatus(service.name)}
+                      disabled={loadingService === service.name} 
+                    >
+                      {loadingService === service.name ? 'Procesando...' : (service.status === 'Activo' ? 'Desactivar' : 'Activar')}
+                    </button>
                   </td>
                   <td className="details-col">
                     <button className="details-button" onClick={() => handleOpenModal(service)}>
