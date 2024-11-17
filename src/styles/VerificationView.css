@@ -1,0 +1,56 @@
+/* Estilos generales de la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #2e2e2e;
+}
+
+/* Ajuste del ancho de las columnas */
+th:nth-child(1), td:nth-child(1) {
+    width: 180px; /* Nombre de usuario */
+}
+
+th:nth-child(2), td:nth-child(2) {
+    width: 150px; /* Nombre */
+}
+
+th:nth-child(3), td:nth-child(3) {
+    width: 150px; /* Apellido */
+}
+
+th:nth-child(4), td:nth-child(4) {
+    width: 100px; /* Estado de verificación */
+}
+
+/* Estilo al pasar el mouse sobre las filas */
+tr:hover {
+    background-color: #0d8ae8;
+}
+
+/* Estilos de carga */
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.loading-circle {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

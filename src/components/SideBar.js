@@ -3,7 +3,8 @@ import React from 'react';
 import '../styles/SideBar.css';
 import servicesLogo from '../assets/images/services_icon.png';
 import usersLogo from '../assets/images/block_users_icon.png';
-import twitSnapsLogo from '../assets/images/twitsnaps_icon.png'; 
+import twitSnapsLogo from '../assets/images/twitsnaps_icon.png';
+import verificationLogo from '../assets/images/verification_icon.png';
 
 const SideBar = ({ onSelect, currentSection }) => {
   return (
@@ -22,7 +23,15 @@ const SideBar = ({ onSelect, currentSection }) => {
             <div className={`sidebar-item ${currentSection === 'users' ? 'active' : ''}`}>
               <a href="#" onClick={() => onSelect('users')}>
                 <img src={usersLogo} alt="Manage Users" className="sidebar-logo" />
-                Usuarios
+                Bloquear Usuarios
+              </a>
+            </div>
+          </li>
+          <li>
+            <div className={`sidebar-item ${currentSection === 'verification' ? 'active' : ''}`}>
+              <a href="#" onClick={() => onSelect('verification')}>
+                <img src={verificationLogo} alt="Verification" className="sidebar-logo" />
+                Verificar Usuarios
               </a>
             </div>
           </li>
