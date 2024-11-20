@@ -1,6 +1,7 @@
 // src/firebase.js
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 // Tu configuración de Firebase
 const firebaseConfig = {
@@ -18,5 +19,6 @@ const firebaseApp = initializeApp(firebaseConfig);
 
 // Exporta Firestore
 const firestore = getFirestore(firebaseApp);
+const storage = getStorage(firebaseApp);
 
-export { firestore };
+export { firestore, storage };

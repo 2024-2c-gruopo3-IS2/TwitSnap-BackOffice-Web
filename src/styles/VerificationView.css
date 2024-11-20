@@ -183,3 +183,9 @@
     min-width: 220px; /* Ajusta el tamaño del contenedor según sea necesario */
     max-width: 220px;
   }
+
+  .validation-images {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
