@@ -117,7 +117,7 @@
 }
 
 .validation-media img {
-    width: 350px;
+    width: 300px;
     height: auto;
     cursor: pointer;
     border: 2px solid #ccc;
@@ -130,8 +130,8 @@
   }
 
   .clickable-image {
-    width: 350px; /* Incrementado desde el tamaño original */
-    height: 350px; /* Mantener proporción cuadrada */
+    width: 300px; /* Incrementado desde el tamaño original */
+    height: 300px; /* Mantener proporción cuadrada */
     cursor: pointer;
     border-radius: 8px;
     object-fit: cover;

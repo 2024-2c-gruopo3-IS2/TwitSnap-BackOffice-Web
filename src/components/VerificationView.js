@@ -134,14 +134,30 @@ const VerificationView = () => {
 
   useEffect(() => {
     const filtered = profiles.filter((profile) => {
-      const isVerifiedMatch = filterStatus ? profile.isVerified.toString() === filterStatus : true;
-      const usernameMatch = profile.username.toLowerCase().includes(searchTerm.toLowerCase());
-
-      return isVerifiedMatch && usernameMatch;
+      const matchesSearch = profile.username.toLowerCase().includes(searchTerm.toLowerCase());
+  
+      if (filterStatus === "verified") {
+        return profile.isVerified && profile.dniFront && profile.dniBack && profile.selfie && matchesSearch;
+      } else if (filterStatus === "with-docs") {
+        return (
+          !profile.isVerified &&
+          profile.dniFront &&
+          profile.dniBack &&
+          profile.selfie &&
+          matchesSearch
+        );
+      } else if (filterStatus === "without-docs") {
+        return (
+          !profile.isVerified &&
+          (!profile.dniFront || !profile.dniBack || !profile.selfie) &&
+          matchesSearch
+        );
+      }
+      return matchesSearch; // Sin filtro, retorna todos
     });
-
+  
     setFilteredProfiles(filtered);
-  }, [searchTerm, filterStatus, profiles]);
+  }, [searchTerm, filterStatus, profiles]);  
 
   return (
     <section className="section">
@@ -168,15 +184,16 @@ const VerificationView = () => {
               onChange={handleSearchChange}
             />
             <div className="verification-select-container">
-              <select
-                className="styled-select"
-                value={filterStatus}
-                onChange={(e) => handleFilterChange(e.target.value)}
-              >
-                <option value="">Todos</option>
-                <option value="true">Validados</option>
-                <option value="false">No validados</option>
-              </select>
+            <select
+              className="styled-select"
+              value={filterStatus}
+              onChange={(e) => handleFilterChange(e.target.value)}
+            >
+              <option value="">Todos</option>
+              <option value="verified">Usuarios Verificados</option>
+              <option value="with-docs">Usuarios Pendientes</option>
+              <option value="without-docs">Usuarios No Verificados</option>
+            </select>
             </div>
           </div>
   
@@ -196,10 +213,6 @@ const VerificationView = () => {
                     {!profile.isVerified && !profile.dniFront && !profile.dniBack && !profile.selfie ?(
                       <>
                         <p>El usuario no ha enviado la documentación aún.</p>
-                        <div className="validation-actions">
-                          <button className="validate-btn">Validar</button>
-                          <button className="reject-btn">Rechazar</button>
-                        </div>
                       </>
                     ) : (
                       profile.isVerified && profile.dniFront && profile.dniBack && profile.selfie ? (
