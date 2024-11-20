@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getAllUsers, getProfileByUsername } from '../handlers/ProfileHandler';
 import '../styles/VerificationView.css';
+import {  getStorage, ref, getDownloadURL } from 'firebase/storage';
 
 let profilesCache = null;
 
@@ -28,40 +29,62 @@ const VerificationView = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
 
-  const fetchProfiles = async () => {
-    setLoading(true);
-    const usernames = await getAllUsers();
-
-    if (profilesCache) {
-      setProfiles(profilesCache);
-      setFilteredProfiles(profilesCache);
-      setLoading(false);
-      return;
-    }
-
-    const profilePromises = usernames.data.map(async (username) => {
-      const profileResult = await getProfileByUsername(username);
-      return {
-        username,
-        name: profileResult.profile.name,
-        surname: profileResult.profile.surname,
-        isVerified: profileResult.profile.is_verified,
-      };
-    });
-
+  const fetchProfileImage = async (username) => {
     try {
-      const profilesWithDetails = await Promise.all(profilePromises);
-      setProfiles(profilesWithDetails);
-      profilesCache = profilesWithDetails;
-      setFilteredProfiles(profilesWithDetails);
-    } catch (err) {
-      setError('Error al obtener los perfiles');
+      const storage = getStorage(); // Obtén la instancia de Firebase Storage
+      const imageRef = ref(storage, `documents/${username}.png`); // Usa el path correcto dentro de Storage
+      const url = await getDownloadURL(imageRef); // Obtén la URL de la imagen
+  
+      console.log(url); // Verifica que la URL se está obteniendo correctamente
+      return url;
+    } catch (error) {
+      console.log('Error fetching image:', error);
+      return "https://static-00.iconduck.com/assets.00/profile-user-icon-2048x2048-m41rxkoe.png"; // URL por defecto si no se encuentra la imagen
     }
-
-    setLoading(false);
   };
 
   useEffect(() => {
+    const fetchProfiles = async () => {
+      setLoading(true);
+      const usernames = await getAllUsers();
+    
+      if (profilesCache) {
+        setProfiles(profilesCache);
+        setFilteredProfiles(profilesCache);
+        setLoading(false);
+        return;
+      }
+    
+      const profilePromises = usernames.data.map(async (username) => {
+        try {
+          const profileResult = await getProfileByUsername(username);
+          return {
+            username,
+            name: profileResult.profile.name,
+            surname: profileResult.profile.surname,
+            isVerified: profileResult.profile.is_verified,
+            selfie: await fetchProfileImage(username),
+          };
+        } catch (err) {
+          console.error("Error fetching profile for", username, err);
+          return null; // Manejo de errores
+        }
+      });
+    
+      try {
+        const profilesWithDetails = await Promise.all(profilePromises);
+        // Filtrar perfiles nulos en caso de errores
+        const validProfiles = profilesWithDetails.filter(profile => profile !== null);
+        setProfiles(validProfiles);
+        profilesCache = validProfiles;
+        setFilteredProfiles(validProfiles);
+      } catch (err) {
+        setError('Error al obtener los perfiles');
+      }
+    
+      setLoading(false);
+    };    
+
     fetchProfiles();
   }, []);
 
@@ -150,22 +173,22 @@ const VerificationView = () => {
                       <div onClick={() => openModal("https://cdn4.iconfinder.com/data/icons/car-misc/100/Driver_license-256.png")}>
                         <img
                           src="https://cdn4.iconfinder.com/data/icons/car-misc/100/Driver_license-256.png"
-                          alt="ID Anverso"
+                          alt="DNI Anverso"
                           className="clickable-image"
                         />
-                        <p>ID (Anverso)</p>
+                        <p>DNI (Anverso)</p>
                       </div>
                       <div onClick={() => openModal("https://cdn2.iconfinder.com/data/icons/ecommerce-206/33/member-256.png")}>
                         <img
                           src="https://cdn2.iconfinder.com/data/icons/ecommerce-206/33/member-256.png"
-                          alt="ID Reverso"
+                          alt="DNI Reverso"
                           className="clickable-image"
                         />
-                        <p>ID (Reverso)</p>
+                        <p>DNI (Reverso)</p>
                       </div>
-                      <div onClick={() => openModal("https://img.a.transfermarkt.technology/portrait/big/8198-1694609670.jpg?lm=1")}>
+                      <div onClick={() => openModal(profile.selfie)}>
                         <img
-                          src="https://img.a.transfermarkt.technology/portrait/big/8198-1694609670.jpg?lm=1"
+                          src={profile.selfie}
                           alt="Selfie"
                           className="clickable-image"
                         />
