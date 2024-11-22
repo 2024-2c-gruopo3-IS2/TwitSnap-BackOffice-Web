@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { getAllUsers, getProfileByUsername } from '../handlers/ProfileHandler';
 import '../styles/VerificationView.css';
 import { storage } from '../firebase.config';
-import {  getStorage, ref, getDownloadURL } from 'firebase/storage';
+import { ref, getDownloadURL } from 'firebase/storage';
 
-const StatusIndicator = ({ isVerified, selfie, dniFront, dniBack }) => {
+const StatusIndicator = ({ isVerified, id}) => {
   // Definir el color según las condiciones:
   let statusColor = '#F44336'; // Rojo por defecto
 
-  if (isVerified && selfie && dniFront && dniBack) {
+  if (isVerified && id) {
     statusColor = '#4CAF50'; // Verde si está verificado y tiene toda la documentación
-  } else if ((selfie && dniFront && dniBack) && !isVerified) {
+  } else if ((id) && !isVerified) {
     statusColor = '#FF9800'; // Naranja si tiene la documentación pero no está verificado
   }
 
@@ -39,31 +39,11 @@ const VerificationView = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
 
-  const fetchSelfie = async (username) => {
+  const fetchId = async (username) => {
     try {
-      const imageRef = ref(storage, `documents/selfie_${username}.png`);
+      const imageRef = ref(storage, `documents/id_${username}.png`);
       const url = await getDownloadURL(imageRef);
       console.log('URL:', url);
-      return url;
-    } catch (error) {
-      return ""; 
-    }
-  };
-
-  const fetchIdFront = async (username) => {
-    try {
-      const imageRef = ref(storage, `documents/dni_1_${username}.png`);
-      const url = await getDownloadURL(imageRef);
-      return url;
-    } catch (error) {
-      return ""; 
-    }
-  };
-
-  const fetchIdBack = async (username) => {
-    try {
-      const imageRef = ref(storage, `documents/dni_2_${username}.png`);
-      const url = await getDownloadURL(imageRef);
       return url;
     } catch (error) {
       return ""; 
@@ -79,17 +59,13 @@ const VerificationView = () => {
       const profilePromises = usernames.data.map(async (username) => {
         try {
           const profileResult = await getProfileByUsername(username);
-          const selfie = await fetchSelfie(username);
-          const dniFront = await fetchIdFront(username);
-          const dniBack = await fetchIdBack(username);
+          const id = await fetchId(username);
           return {
             username,
             name: profileResult.profile.name,
             surname: profileResult.profile.surname,
             isVerified: profileResult.profile.is_verified,
-            selfie: selfie,
-            dniFront: dniFront,
-            dniBack: dniBack,
+            id: id,
           };
         } catch (err) {
           console.error("Error fetching profile for", username, err);
@@ -137,19 +113,17 @@ const VerificationView = () => {
       const matchesSearch = profile.username.toLowerCase().includes(searchTerm.toLowerCase());
   
       if (filterStatus === "verified") {
-        return profile.isVerified && profile.dniFront && profile.dniBack && profile.selfie && matchesSearch;
+        return profile.isVerified && profile.id && matchesSearch;
       } else if (filterStatus === "with-docs") {
         return (
           !profile.isVerified &&
-          profile.dniFront &&
-          profile.dniBack &&
-          profile.selfie &&
+          profile.id &&
           matchesSearch
         );
       } else if (filterStatus === "without-docs") {
         return (
           !profile.isVerified &&
-          (!profile.dniFront || !profile.dniBack || !profile.selfie) &&
+          (!profile.id) &&
           matchesSearch
         );
       }
@@ -202,7 +176,7 @@ const VerificationView = () => {
               <div key={profile.username} className="user-item">
                 <div className="user-summary" onClick={() => toggleExpand(profile.username)}>
                   <div>
-                    <StatusIndicator isVerified={profile.isVerified} selfie={profile.selfie} dniFront={profile.dniFront} dniBack={profile.dniBack}/>
+                    <StatusIndicator isVerified={profile.isVerified} id={profile.id} />
                     <strong>{profile.username}</strong> - Apellido: {profile.surname} - Nombre: {profile.name}
                   </div>
                 </div>
@@ -210,39 +184,23 @@ const VerificationView = () => {
                   <div className="user-details">
                     <p><strong>Nombre:</strong> {profile.name}</p>
                     <p><strong>Apellido:</strong> {profile.surname}</p>
-                    {!profile.isVerified && !profile.dniFront && !profile.dniBack && !profile.selfie ?(
+                    {!profile.isVerified && !profile.id ?(
                       <>
                         <p>El usuario no ha enviado la documentación aún.</p>
                       </>
                     ) : (
-                      profile.isVerified && profile.dniFront && profile.dniBack && profile.selfie ? (
+                      profile.isVerified && profile.id ? (
                         <>
                           <p>Usuario verificado correctamente.</p>
                           <div className="validation-media">
                             <div className="validation-images">
-                              <div onClick={() => openModal(profile.dniFront)}>
+                              <div onClick={() => openModal(profile.id)}>
                                 <img
-                                  src={profile.dniFront}
-                                  alt="DNI Anverso"
-                                  className="clickable-image"
-                                />
-                                <p>DNI (Anverso)</p>
-                              </div>
-                              <div onClick={() => openModal(profile.dniBack)}>
-                                <img
-                                  src={profile.dniBack}
-                                  alt="DNI Reverso"
-                                  className="clickable-image"
-                                />
-                                <p>DNI (Reverso)</p>
-                              </div>
-                              <div onClick={() => openModal(profile.selfie)}>
-                                <img
-                                  src={profile.selfie}
+                                  src={profile.id}
                                   alt="Selfie"
                                   className="clickable-image"
                                 />
-                                <p>Selfie</p>
+                                <p>Identificación</p>
                               </div>
                             </div>
                           </div>
@@ -253,36 +211,19 @@ const VerificationView = () => {
 
                           <div className="validation-media">
                             <div className="validation-images">
-                              <div onClick={() => openModal(profile.dniFront)}>
+                              <div onClick={() => openModal(profile.id)}>
                                 <img
-                                  src={profile.dniFront}
-                                  alt="DNI Anverso"
+                                  src={profile.id}
+                                  alt="Id"
                                   className="clickable-image"
                                 />
-                                <p>DNI (Anverso)</p>
-                              </div>
-                              <div onClick={() => openModal(profile.dniBack)}>
-                                <img
-                                  src={profile.dniBack}
-                                  alt="DNI Reverso"
-                                  className="clickable-image"
-                                />
-                                <p>DNI (Reverso)</p>
-                              </div>
-                              <div onClick={() => openModal(profile.selfie)}>
-                                <img
-                                  src={profile.selfie}
-                                  alt="Selfie"
-                                  className="clickable-image"
-                                />
-                                <p>Selfie</p>
+                                <p>Identificación</p>
                               </div>
                             </div>
                           </div>
 
                           <div className="validation-actions">
                             <button className="validate-btn">Validar</button>
-                            <button className="reject-btn">Rechazar</button>
                           </div>
                         </>
                       )

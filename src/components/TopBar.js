@@ -16,7 +16,7 @@ const TopBar = ({ onProfileClick }) => {
       <div className="profile" onClick={onProfileClick}>
         <span>Mi perfil</span>
         <img
-          src="https://static-00.iconduck.com/assets.00/profile-user-icon-2048x2048-m41rxkoe.png"
+          src="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png"
           alt="Profile"
           className="profile-image"
         />
