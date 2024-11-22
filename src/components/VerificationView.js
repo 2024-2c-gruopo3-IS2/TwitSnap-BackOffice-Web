@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAllUsers, getProfileByUsername } from '../handlers/ProfileHandler';
+import { getAllUsers, getProfileByUsername, verifyProfile } from '../handlers/ProfileHandler';
 import '../styles/VerificationView.css';
 import { storage } from '../firebase.config';
 import { ref, getDownloadURL } from 'firebase/storage';
@@ -223,7 +223,26 @@ const VerificationView = () => {
                           </div>
 
                           <div className="validation-actions">
-                            <button className="validate-btn">Validar</button>
+                            <button
+                              className="validate-btn"
+                              onClick={async () => {
+                                const result = await verifyProfile(profile.username);
+                                if (result.success) {
+                                  alert(result.message); // Mostrar mensaje de éxito
+                                  setProfiles((prevProfiles) =>
+                                    prevProfiles.map((p) =>
+                                      p.username === profile.username
+                                        ? { ...p, isVerified: true } // Actualizar el estado local del perfil
+                                        : p
+                                    )
+                                  );
+                                } else {
+                                  alert(`Error: ${result.message}`); // Mostrar mensaje de error
+                                }
+                              }}
+                            >
+                              Validar
+                            </button>
                           </div>
                         </>
                       )

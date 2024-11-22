@@ -24,7 +24,7 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <TopBar onProfileClick={handleProfileClick} /> {/* Usa el componente TopBar aquí */}
+      <TopBar onProfileClick={handleProfileClick} /> 
       <SideBar onSelect={setCurrentSection} currentSection={currentSection} />
       <main className="content">
         {currentSection === 'services' && <ServiceView />}

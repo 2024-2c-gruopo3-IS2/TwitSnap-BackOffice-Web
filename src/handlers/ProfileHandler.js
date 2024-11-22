@@ -83,3 +83,49 @@ export const getProfileByUsername = async (username) => {
         return { success: false, message: error.message };
     }
 };
+
+
+export const verifyProfile = async (username) => {
+
+    console.log('Verifying profile:', username);
+
+    try {
+        const response = await fetch(`${API_URL}/profiles/verify?username=${username}`, { 
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to verify user profile');
+        }
+
+        return { success: true, message: 'Perfil verificado con éxito' };
+    } catch (error) {
+        console.error('Error al verificar el perfil:', error);
+        return { success: false, message: error.message };
+    }
+}
+
+export const unverifyProfile = async (username) => {
+    try {
+        const response = await fetch(`${API_URL}/profiles/unverify?username=${username}`, { 
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to unverify user profile');
+        }
+
+        return { success: true, message: 'Perfil desverificado con éxito' };
+    } catch (error) {
+        console.error('Error al desverificar el perfil:', error);
+        return { success: false, message: error.message };
+    }
+}
