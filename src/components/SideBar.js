@@ -5,6 +5,7 @@ import servicesLogo from '../assets/images/services_icon.png';
 import usersLogo from '../assets/images/block_users_icon.png';
 import twitSnapsLogo from '../assets/images/twitsnaps_icon.png';
 import verificationLogo from '../assets/images/verification_icon.png';
+import metricsLogo from '../assets/images/metrics_icon.png';
 
 const SideBar = ({ onSelect, currentSection }) => {
   return (
@@ -40,6 +41,14 @@ const SideBar = ({ onSelect, currentSection }) => {
               <a href="#" onClick={() => onSelect('twitsnaps')}>
                 <img src={twitSnapsLogo} alt="TwitSnaps" className="sidebar-logo" />
                 TwitSnaps
+              </a>
+            </div>
+          </li>
+          <li>
+            <div className={`sidebar-item ${currentSection === 'metrics' ? 'active' : ''}`}>
+              <a href="#" onClick={() => onSelect('metrics')}>
+                <img src={metricsLogo} alt="Metrics" className="sidebar-logo" />
+                Métricas
               </a>
             </div>
           </li>

@@ -8,6 +8,7 @@ import BlockUsers from './BlockUsers';
 import TwitSnapsView from './TwitSnapsView';
 import ProfileView from './ProfileView';
 import VerificationView from './VerificationView';
+import Metrics from './Metrics';
 import '../styles/Home.css';
 
 const Home = () => {
@@ -31,6 +32,7 @@ const Home = () => {
         {currentSection === 'users' && <BlockUsers />}
         {currentSection === 'twitsnaps' && <TwitSnapsView />}
         {currentSection === 'verification' && <VerificationView />}
+        {currentSection === 'metrics' && <Metrics />}
         {currentSection === 'profile' && (
           <ProfileView email={userEmail} onLogout={handleLogout} />
         )}
