@@ -2,11 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { getAllUsers, getEmailByUsername } from '../handlers/ProfileHandler';
 import { blockUser, unblockUser, getUsersStatus, getStatusByEmail } from '../handlers/BlockUserHandler';
 import '../styles/BlockUsers.css';
-import userDetailsImage from '../assets/images/moreDetails.png'; 
+import userDetailsImage from '../assets/images/moreDetails.png';
 import UserDetailsModal from './UserDetailsModal'; 
-
-// Caché para almacenar los usuarios temporalmente
-let usersCache = null;
 
 const StatusIndicator = ({ isBlocked }) => (
   <span
@@ -23,20 +20,15 @@ const StatusIndicator = ({ isBlocked }) => (
 
 const BlockUsers = () => {
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true); // Estado de carga general
+  const [loading, setLoading] = useState(true);
   const [loadingUsers, setLoadingUsers] = useState({});
   const [error, setError] = useState(null);
-  const [selectedUser, setSelectedUser] = useState(null); 
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [blockSuccess, setBlockSuccess] = useState('');
 
   const fetchUsers = async () => {
-    setLoading(true); // Mostrar círculo de carga
-    if (usersCache) {
-      setUsers(usersCache);
-      setLoading(false); 
-      return;
-    }
-
+    setLoading(true);
     const resultUsers = await getAllUsers();
     const resultStatus = await getUsersStatus();
 
@@ -54,35 +46,37 @@ const BlockUsers = () => {
 
       const usersWithDetails = await Promise.all(userPromises);
       setUsers(usersWithDetails);
-      usersCache = usersWithDetails;
     } else {
       setError(resultUsers.message);
     }
-    setLoading(false); // Ocultar círculo de carga
+    setLoading(false);
   };
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
-  const toggleUserBlock = async (user) => {
-    setLoadingUsers((prevState) => ({ ...prevState, [user.email]: true }));
+  const handleBlock = async (reason, days) => {
+    if (!selectedUser) return;
 
-    const action = user.isBlocked ? unblockUser : blockUser;
-    const result = await action(user.email);
+    setLoadingUsers((prevState) => ({ ...prevState, [selectedUser.email]: true }));
+
+    const result = await blockUser(selectedUser.email, reason, days);
 
     if (result.success) {
       setUsers((prevUsers) =>
         prevUsers.map((u) =>
-          u.email === user.email ? { ...u, isBlocked: !u.isBlocked } : u
+          u.email === selectedUser.email ? { ...u, isBlocked: true } : u
         )
       );
-      usersCache = null; // Invalida la caché
+      setBlockSuccess('Usuario bloqueado con éxito.');
+      setTimeout(() => setBlockSuccess(''), 3000); // Oculta el mensaje después de 3 segundos
     } else {
       setError(result.message);
     }
 
-    setLoadingUsers((prevState) => ({ ...prevState, [user.email]: false }));
+    setLoadingUsers((prevState) => ({ ...prevState, [selectedUser.email]: false }));
+    closeModal();
   };
 
   const openModal = (user) => {
@@ -101,12 +95,13 @@ const BlockUsers = () => {
 
       {loading && (
         <div className="loading-container">
-          <div className="loading-circle"></div> {/* Círculo de carga */}
+          <div className="loading-circle"></div>
         </div>
       )}
 
       {!loading && (
         <>
+          {blockSuccess && <div className="success-message">{blockSuccess}</div>}
           <table>
             <thead>
               <tr>
@@ -127,24 +122,22 @@ const BlockUsers = () => {
                     {user.isBlocked ? 'Bloqueado' : 'Activo'}
                   </td>
                   <td>
-                    <button
-                      onClick={() => toggleUserBlock(user)}
-                      disabled={loadingUsers[user.email]}
-                      style={{
-                        backgroundColor: user.isBlocked ? '#4CAF50' : '#F44336',
-                        color: 'white',
-                        padding: '8px 16px',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      {loadingUsers[user.email]
-                        ? 'Procesando...'
-                        : user.isBlocked
-                        ? 'Desbloquear'
-                        : 'Bloquear'}
-                    </button>
+                    {user.isBlocked ? (
+                      <button
+                        onClick={() => unblockUser(user.email)}
+                        disabled={loadingUsers[user.email]}
+                        className="block-button unblock"
+                      >
+                        {loadingUsers[user.email] ? 'Procesando...' : 'Desbloquear'}
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => openModal(user)}
+                        className="block-button block"
+                      >
+                        Bloquear
+                      </button>
+                    )}
                   </td>
                   <td>
                     <button onClick={() => openModal(user)} className="details-button">
@@ -159,13 +152,79 @@ const BlockUsers = () => {
               ))}
             </tbody>
           </table>
-
-          {isModalOpen && selectedUser && (
-            <UserDetailsModal user={selectedUser} onClose={closeModal} />
-          )}
         </>
       )}
+
+      {isModalOpen && selectedUser && (
+        <BlockModal
+          user={selectedUser}
+          onClose={closeModal}
+          onSubmit={handleBlock}
+        />
+      )}
     </section>
+  );
+};
+
+const BlockModal = ({ user, onClose, onSubmit }) => {
+  const [reason, setReason] = useState('');
+  const [days, setDays] = useState(1);
+
+  const reasons = [
+    'Violación de las reglas de la plataforma',
+    'Spam y actividades no deseadas',
+    'Suplantación de identidad',
+    'Amenazas a la seguridad',
+    'Contenido ilegal',
+    'Incitación al desorden o desobediencia civil',
+    'Violaciones repetidas de términos y condiciones',
+    'Protección de la comunidad',
+    'Acciones automatizadas sospechosas',
+    'Requerimientos legales o gubernamentales',
+  ];
+
+  const handleSubmit = () => {
+    if (!reason) return;
+    onSubmit(reason, days);
+  };
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <h3>Bloquear a {user.username}</h3>
+        <label>
+          Motivo del bloqueo:
+          <select value={reason} onChange={(e) => setReason(e.target.value)}>
+            <option value="" disabled>
+              Selecciona un motivo
+            </option>
+            {reasons.map((r) => (
+              <option key={r} value={r}>
+                {r}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Duración (días):
+          <input
+            type="number"
+            min="1"
+            max="14"
+            value={days}
+            onChange={(e) => setDays(Number(e.target.value))}
+          />
+        </label>
+        <div className="modal-actions">
+          <button onClick={handleSubmit} className="confirm-button">
+            Confirmar
+          </button>
+          <button onClick={onClose} className="cancel-button">
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 
