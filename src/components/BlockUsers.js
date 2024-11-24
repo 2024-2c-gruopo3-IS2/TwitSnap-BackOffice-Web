@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { getAllUsers, getEmailByUsername } from '../handlers/ProfileHandler';
-import { blockUser, unblockUser, getUsersStatus, getStatusByEmail } from '../handlers/BlockUserHandler';
+import { getAllUsers, getProfileByUsername } from '../handlers/ProfileHandler';
+import { blockUser, unblockUser,getBlockedUsers} from '../handlers/BlockUserHandler';
 import '../styles/BlockUsers.css';
-import userDetailsImage from '../assets/images/moreDetails.png';
+import userDetailsImage from '../assets/images/moreDetails.png'; 
 import UserDetailsModal from './UserDetailsModal'; 
+import BlockUsersModal from './BlockUsersModal';
+
+
+// Caché para almacenar los usuarios temporalmente
+let usersCache = null;
 
 const StatusIndicator = ({ isBlocked }) => (
   <span
@@ -20,64 +25,44 @@ const StatusIndicator = ({ isBlocked }) => (
 
 const BlockUsers = () => {
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [blockedEmails, setBlockedEmails] = useState([]);
+  const [loading, setLoading] = useState(true); // Estado de carga general
   const [loadingUsers, setLoadingUsers] = useState({});
-  const [error, setError] = useState(null);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [blockSuccess, setBlockSuccess] = useState('');
+  const [selectedUser, setSelectedUser] = useState(null); 
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
 
   const fetchUsers = async () => {
-    setLoading(true);
-    const resultUsers = await getAllUsers();
-    const resultStatus = await getUsersStatus();
-
-    if (resultUsers.success && resultStatus.success) {
-      const userPromises = resultUsers.data.map(async (username) => {
-        const email = await getEmailByUsername(username);
-        const statusResult = await getStatusByEmail(email, resultStatus.users);
-
-        return {
-          username,
-          email,
-          isBlocked: statusResult.success ? statusResult.status : true,
-        };
-      });
-
-      const usersWithDetails = await Promise.all(userPromises);
-      setUsers(usersWithDetails);
-    } else {
-      setError(resultUsers.message);
+    setLoading(true); // Mostrar círculo de carga
+    if (usersCache) {
+      setUsers(usersCache);
+      setLoading(false); 
+      return;
     }
-    setLoading(false);
+
+    const resultUsers = await getAllUsers();
+    const blockedUsers = await getBlockedUsers();
+    const blockedEmails = blockedUsers.data.map((user) => user.email);
+
+    const users = await Promise.all(
+      resultUsers.data.map(async (user) => {
+        const profile = await getProfileByUsername(user);
+        return { username: profile.profile.username, email: profile.profile.email, isBlocked: blockedEmails.includes(profile.profile.email) };
+      })
+    );
+
+    console.log('Users:', users);
+    console.log('Blocked emails:', blockedEmails);
+
+    setUsers(users);
+    setBlockedEmails(blockedEmails);
+
+    setLoading(false); // Ocultar círculo de carga
   };
 
   useEffect(() => {
     fetchUsers();
   }, []);
-
-  const handleBlock = async (reason, days) => {
-    if (!selectedUser) return;
-
-    setLoadingUsers((prevState) => ({ ...prevState, [selectedUser.email]: true }));
-
-    const result = await blockUser(selectedUser.email, reason, days);
-
-    if (result.success) {
-      setUsers((prevUsers) =>
-        prevUsers.map((u) =>
-          u.email === selectedUser.email ? { ...u, isBlocked: true } : u
-        )
-      );
-      setBlockSuccess('Usuario bloqueado con éxito.');
-      setTimeout(() => setBlockSuccess(''), 3000); // Oculta el mensaje después de 3 segundos
-    } else {
-      setError(result.message);
-    }
-
-    setLoadingUsers((prevState) => ({ ...prevState, [selectedUser.email]: false }));
-    closeModal();
-  };
 
   const openModal = (user) => {
     setSelectedUser(user);
@@ -89,19 +74,50 @@ const BlockUsers = () => {
     setIsModalOpen(false);
   };
 
+  const openBlockModal = (user) => {
+    setSelectedUser(user);
+    setIsBlockModalOpen(true);
+  }
+
+  const closeBlockModal = () => {
+    setSelectedUser(null);
+    setIsBlockModalOpen(false);
+    fetchUsers();
+  }
+  
+  const handleBlockOrUnblock = async (user) => {
+    setLoadingUsers((prevState) => ({ ...prevState, [user.email]: true }));
+  
+    try {
+      if (user.isBlocked) {
+        // Desbloquear usuario
+        await unblockUser(user.email);
+        fetchUsers(); // Refrescar lista de usuarios
+      } else {
+        // Bloquear usuario (abrir modal para confirmar)
+        openBlockModal(user);
+      }
+  
+    } catch (error) {
+      console.error("Error al bloquear/desbloquear usuario:", error);
+    } finally {
+      setLoadingUsers((prevState) => ({ ...prevState, [user.email]: false }));
+    }
+  };
+  
+
   return (
     <section className="section">
       <h2>Administrar Usuarios</h2>
 
       {loading && (
         <div className="loading-container">
-          <div className="loading-circle"></div>
+          <div className="loading-circle"></div> {/* Círculo de carga */}
         </div>
       )}
 
       {!loading && (
         <>
-          {blockSuccess && <div className="success-message">{blockSuccess}</div>}
           <table>
             <thead>
               <tr>
@@ -118,26 +134,28 @@ const BlockUsers = () => {
                   <td>{user.username}</td>
                   <td>{user.email}</td>
                   <td>
-                    <StatusIndicator isBlocked={user.isBlocked} />
+                    <StatusIndicator isBlocked={blockedEmails.includes(user.email)} />
                     {user.isBlocked ? 'Bloqueado' : 'Activo'}
                   </td>
                   <td>
-                    {user.isBlocked ? (
-                      <button
-                        onClick={() => unblockUser(user.email)}
-                        disabled={loadingUsers[user.email]}
-                        className="block-button unblock"
-                      >
-                        {loadingUsers[user.email] ? 'Procesando...' : 'Desbloquear'}
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => openModal(user)}
-                        className="block-button block"
-                      >
-                        Bloquear
-                      </button>
-                    )}
+                  <button
+                      onClick={() => handleBlockOrUnblock(user)}
+                      disabled={loadingUsers[user.email]}
+                      style={{
+                        backgroundColor: user.isBlocked ? "#4CAF50" : "#F44336",
+                        color: "white",
+                        padding: "8px 16px",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {loadingUsers[user.email]
+                        ? "Procesando..."
+                        : user.isBlocked
+                        ? "Desbloquear"
+                        : "Bloquear"}
+                    </button>
                   </td>
                   <td>
                     <button onClick={() => openModal(user)} className="details-button">
@@ -152,79 +170,24 @@ const BlockUsers = () => {
               ))}
             </tbody>
           </table>
+
+          {isModalOpen && selectedUser && (
+            <UserDetailsModal user={selectedUser} onClose={closeModal} />
+          )}
+
+          {isBlockModalOpen && selectedUser && (
+            <BlockUsersModal
+              user={selectedUser}
+              onClose={closeBlockModal}
+              onBlock={async () => {
+                await fetchUsers(); // Refrescar usuarios tras bloqueo
+                closeBlockModal(); // Cerrar modal
+              }}
+            />
+          )}
         </>
       )}
-
-      {isModalOpen && selectedUser && (
-        <BlockModal
-          user={selectedUser}
-          onClose={closeModal}
-          onSubmit={handleBlock}
-        />
-      )}
     </section>
-  );
-};
-
-const BlockModal = ({ user, onClose, onSubmit }) => {
-  const [reason, setReason] = useState('');
-  const [days, setDays] = useState(1);
-
-  const reasons = [
-    'Violación de las reglas de la plataforma',
-    'Spam y actividades no deseadas',
-    'Suplantación de identidad',
-    'Amenazas a la seguridad',
-    'Contenido ilegal',
-    'Incitación al desorden o desobediencia civil',
-    'Violaciones repetidas de términos y condiciones',
-    'Protección de la comunidad',
-    'Acciones automatizadas sospechosas',
-    'Requerimientos legales o gubernamentales',
-  ];
-
-  const handleSubmit = () => {
-    if (!reason) return;
-    onSubmit(reason, days);
-  };
-
-  return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h3>Bloquear a {user.username}</h3>
-        <label>
-          Motivo del bloqueo:
-          <select value={reason} onChange={(e) => setReason(e.target.value)}>
-            <option value="" disabled>
-              Selecciona un motivo
-            </option>
-            {reasons.map((r) => (
-              <option key={r} value={r}>
-                {r}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Duración (días):
-          <input
-            type="number"
-            min="1"
-            max="14"
-            value={days}
-            onChange={(e) => setDays(Number(e.target.value))}
-          />
-        </label>
-        <div className="modal-actions">
-          <button onClick={handleSubmit} className="confirm-button">
-            Confirmar
-          </button>
-          <button onClick={onClose} className="cancel-button">
-            Cancelar
-          </button>
-        </div>
-      </div>
-    </div>
   );
 };
 
