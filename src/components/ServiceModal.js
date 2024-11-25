@@ -51,13 +51,13 @@ const ServiceModal = ({ service, onClose }) => {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <button className="modal-close" onClick={onClose}>
+    <div className="service-modal-overlay">
+      <div className="service-modal-content">
+        <button className="service-modal-close" onClick={onClose}>
           <img
             src="https://cdn0.iconfinder.com/data/icons/round-ui-icons/512/close_red.png"
             alt="Cerrar"
-            className="close-icon"
+            className="service-close-icon"
           />
         </button>
 
@@ -70,13 +70,13 @@ const ServiceModal = ({ service, onClose }) => {
         <p><strong>Tiempo de Ejecución:</strong> {service.timeRunning}</p>
 
         {/* Gráficos de uso */}
-        <div className="chart-container">
-          <div className="chart-item">
+        <div className="service-chart-container">
+          <div className="service-chart-item">
             <h3>Uso de CPU</h3>
             <Line data={cpuData} />
           </div>
 
-          <div className="chart-item">
+          <div className="service-chart-item">
             <h3>Uso de Memoria</h3>
             <Line data={memoryData} />
           </div>

@@ -38,16 +38,13 @@ export const postBlockUserMetric = async (email, reason, duration) => {
         return null;
     }
 
-    const dataString = `${email},${reason},${duration}`;
-
     try {
-        const response = await fetch(`${BASE_URL}/metrics/block`, {
+        const response = await fetch(`${BASE_URL}/metrics/blocks?value=${email},${reason},${duration}`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            'accept': 'application/json',
             'token': token,
-        },
-        body: JSON.stringify({ value: dataString }),
+        }
         });
         if (!response.ok) {
         throw new Error('Error al bloquear usuario');

@@ -1,4 +1,4 @@
-.modal-overlay {
+.service-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,7 +11,7 @@
     z-index: 9999;
 }
 
-.modal-content {
+.service-modal-content {
     background: #1e1e1e; /* Fondo oscuro para el contenido del modal */
     padding: 30px; /* Espaciado aumentado */
     border-radius: 12px; /* Bordes más redondeados */
@@ -24,29 +24,36 @@
     color: #f5f5f5; /* Texto claro */
 }
 
-.modal-close {
+.service-modal-close {
     position: absolute;
-    top: 15px; /* Ajuste de posición */
-    right: 15px; /* Ajuste de posición */
     background: none;
     border: none;
     cursor: pointer;
     color: #f5f5f5; /* Color del icono de cierre */
+    max-width: 50px;
+    margin-left: 850px;
+    margin-bottom: 100px;
 }
 
-.close-icon {
+.service-modal-close:hover {
+    color: #f5f5f5; /* Cambio de color al pasar el cursor */
+    background-color: #2e2e2e;
+}
+
+
+.service-close-icon {
     width: 24px; /* Aumento del tamaño del icono */
     height: 24px;
 }
 
-.chart-container {
+.service-chart-container {
     display: flex; /* Coloca los gráficos en fila */
     gap: 30px; /* Aumenta el espacio entre los gráficos */
     margin-top: 20px;
     justify-content: space-between; /* Espaciado más equitativo entre gráficos */
 }
 
-.chart-item {
+.service-chart-item {
     flex: 1; /* Asegura que ambos gráficos tomen el mismo ancho */
     min-width: 300px; /* Tamaño mínimo para que los gráficos no colapsen */
     background: #2e2e2e; /* Fondo oscuro para los elementos del gráfico */
