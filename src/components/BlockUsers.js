@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { getAllUsers, getProfileByUsername } from '../handlers/ProfileHandler';
 import { blockUser, unblockUser, getBlockedUsers } from '../handlers/BlockUserHandler';
+import { postBlockUserMetric } from '../handlers/MetricsHandler';
 import '../styles/BlockUsers.css';
 import userDetailsImage from '../assets/images/moreDetails.png';
 import UserDetailsModal from './UserDetailsModal';
@@ -153,6 +154,7 @@ const BlockUsers = () => {
     setLoadingForUser(selectedUser.email, true);
     try {
       await blockUser(selectedUser.email, selectedReason, blockDays);
+      await postBlockUserMetric(selectedUser.email, selectedReason, blockDays);
       await updateUsers(); // Actualiza la lista de usuarios después de bloquear
     } finally {
       setLoadingForUser(selectedUser.email, false);
