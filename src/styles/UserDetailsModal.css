@@ -48,3 +48,54 @@
   font-size: 18px;
   font-weight: bold;
 }
+
+.userDetailsModal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.userDetailsModal-content {
+  background-color: #2e2e2e;
+  padding: 20px;
+  border-radius: 10px;
+  width: 600px;
+  color: white;
+  margin-top: 80px;
+}
+
+.userDetailsModal-close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.userDetailsModal-close:hover,
+.userDetailsModal-close:focus {
+  color: #f44336;
+  cursor: pointer;
+}
+
+.blockedUserDetails {
+  margin-bottom: 5px;
+  padding: 15px;
+  background-color: rgba(255, 0, 0, 0.1);
+  border: 1px solid red;
+  border-radius: 8px;
+}
+
+.blockedUserDetails-title {
+  color: red;
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
