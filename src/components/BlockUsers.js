@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { getAllUsers, getEmailByUsername } from '../handlers/ProfileHandler';
-import { blockUser, unblockUser, getUsersStatus, getStatusByEmail } from '../handlers/BlockUserHandler';
+import React, { useEffect, useState, useRef } from 'react';
+import { getAllUsers, getProfileByUsername } from '../handlers/ProfileHandler';
+import { blockUser, unblockUser, getBlockedUsers } from '../handlers/BlockUserHandler';
 import '../styles/BlockUsers.css';
-import userDetailsImage from '../assets/images/moreDetails.png'; 
-import UserDetailsModal from './UserDetailsModal'; 
-
-// Caché para almacenar los usuarios temporalmente
-let usersCache = null;
+import userDetailsImage from '../assets/images/moreDetails.png';
+import UserDetailsModal from './UserDetailsModal';
 
 const StatusIndicator = ({ isBlocked }) => (
   <span
@@ -23,67 +20,91 @@ const StatusIndicator = ({ isBlocked }) => (
 
 const BlockUsers = () => {
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true); // Estado de carga general
-  const [loadingUsers, setLoadingUsers] = useState({});
-  const [error, setError] = useState(null);
-  const [selectedUser, setSelectedUser] = useState(null); 
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [blockedEmails, setBlockedEmails] = useState([]);
+  const [loadingState, setLoadingState] = useState({
+    general: true,
+    specific: {},
+  });
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
+  const [selectedReason, setSelectedReason] = useState(null);
+  const [blockDays, setBlockDays] = useState(2); // Días por defecto
 
+  const isFetching = useRef(false); // Para evitar duplicar llamadas
+  const cacheRef = useRef(null); // Caché de usuarios
+
+  const setLoadingForUser = (email, isLoading) => {
+    setLoadingState((prev) => ({
+      ...prev,
+      specific: {
+        ...prev.specific,
+        [email]: isLoading,
+      },
+    }));
+  };
+
+  // Función para cargar los usuarios al iniciar
   const fetchUsers = async () => {
-    setLoading(true); // Mostrar círculo de carga
-    if (usersCache) {
-      setUsers(usersCache);
-      setLoading(false); 
+    if (isFetching.current) return; // Evitar múltiples solicitudes simultáneas
+    isFetching.current = true;
+    setLoadingState((prev) => ({ ...prev, general: true }));
+
+    if (cacheRef.current) {
+      setUsers(cacheRef.current);
+      setLoadingState((prev) => ({ ...prev, general: false }));
+      isFetching.current = false;
       return;
     }
 
-    const resultUsers = await getAllUsers();
-    const resultStatus = await getUsersStatus();
+    try {
+      const resultUsers = await getAllUsers();
+      const blockedUsers = await getBlockedUsers();
+      const blockedEmails = blockedUsers.data.map((user) => user.email);
 
-    if (resultUsers.success && resultStatus.success) {
-      const userPromises = resultUsers.data.map(async (username) => {
-        const email = await getEmailByUsername(username);
-        const statusResult = await getStatusByEmail(email, resultStatus.users);
+      const users = await Promise.all(
+        resultUsers.data.map(async (user) => {
+          const profile = await getProfileByUsername(user);
+          return {
+            username: profile.profile.username,
+            email: profile.profile.email,
+            isBlocked: blockedEmails.includes(profile.profile.email),
+          };
+        })
+      );
 
-        return {
-          username,
-          email,
-          isBlocked: statusResult.success ? statusResult.status : true,
-        };
-      });
-
-      const usersWithDetails = await Promise.all(userPromises);
-      setUsers(usersWithDetails);
-      usersCache = usersWithDetails;
-    } else {
-      setError(resultUsers.message);
+      cacheRef.current = users; // Guardar usuarios en caché
+      setUsers(users);
+      setBlockedEmails(blockedEmails);
+    } catch (error) {
+      console.error('Error al obtener los usuarios:', error);
+    } finally {
+      setLoadingState((prev) => ({ ...prev, general: false }));
+      isFetching.current = false;
     }
-    setLoading(false); // Ocultar círculo de carga
+  };
+
+  // Función para actualizar los usuarios luego de bloquear/desbloquear
+  const updateUsers = async () => {
+    try {
+      const blockedUsers = await getBlockedUsers();
+      const blockedEmails = blockedUsers.data.map((user) => user.email);
+
+      setBlockedEmails(blockedEmails);
+      setUsers((prevUsers) =>
+        prevUsers.map((user) => ({
+          ...user,
+          isBlocked: blockedEmails.includes(user.email),
+        }))
+      );
+    } catch (error) {
+      console.error('Error al actualizar los usuarios:', error);
+    }
   };
 
   useEffect(() => {
     fetchUsers();
   }, []);
-
-  const toggleUserBlock = async (user) => {
-    setLoadingUsers((prevState) => ({ ...prevState, [user.email]: true }));
-
-    const action = user.isBlocked ? unblockUser : blockUser;
-    const result = await action(user.email);
-
-    if (result.success) {
-      setUsers((prevUsers) =>
-        prevUsers.map((u) =>
-          u.email === user.email ? { ...u, isBlocked: !u.isBlocked } : u
-        )
-      );
-      usersCache = null; // Invalida la caché
-    } else {
-      setError(result.message);
-    }
-
-    setLoadingUsers((prevState) => ({ ...prevState, [user.email]: false }));
-  };
 
   const openModal = (user) => {
     setSelectedUser(user);
@@ -95,17 +116,61 @@ const BlockUsers = () => {
     setIsModalOpen(false);
   };
 
+  const openBlockModal = (user) => {
+    setSelectedUser(user);
+    setIsBlockModalOpen(true);
+    setSelectedReason(null); // Reiniciar selección
+    setBlockDays(2); // Restablecer días
+  };
+
+  const closeBlockModal = () => {
+    setSelectedUser(null);
+    setIsBlockModalOpen(false);
+  };
+
+  const handleBlockOrUnblock = async (user) => {
+    if (user.isBlocked) {
+      setLoadingForUser(user.email, true);
+      try {
+        await unblockUser(user.email);
+        await updateUsers(); // Actualiza la lista de usuarios después de desbloquear
+      } catch (error) {
+        console.error('Error al desbloquear usuario:', error);
+      } finally {
+        setLoadingForUser(user.email, false);
+      }
+    } else {
+      openBlockModal(user); // Mostrar modal de confirmación para bloquear
+    }
+  };
+
+  const handleConfirmBlock = async () => {
+    if (!selectedReason) {
+      alert('Por favor, selecciona una razón para el bloqueo.');
+      return;
+    }
+
+    setLoadingForUser(selectedUser.email, true);
+    try {
+      await blockUser(selectedUser.email, selectedReason, blockDays);
+      await updateUsers(); // Actualiza la lista de usuarios después de bloquear
+    } finally {
+      setLoadingForUser(selectedUser.email, false);
+      closeBlockModal();
+    }
+  };
+
   return (
     <section className="section">
       <h2>Administrar Usuarios</h2>
 
-      {loading && (
+      {loadingState.general && (
         <div className="loading-container">
           <div className="loading-circle"></div> {/* Círculo de carga */}
         </div>
       )}
 
-      {!loading && (
+      {!loadingState.general && (
         <>
           <table>
             <thead>
@@ -123,23 +188,16 @@ const BlockUsers = () => {
                   <td>{user.username}</td>
                   <td>{user.email}</td>
                   <td>
-                    <StatusIndicator isBlocked={user.isBlocked} />
+                    <StatusIndicator isBlocked={blockedEmails.includes(user.email)} />
                     {user.isBlocked ? 'Bloqueado' : 'Activo'}
                   </td>
                   <td>
                     <button
-                      onClick={() => toggleUserBlock(user)}
-                      disabled={loadingUsers[user.email]}
-                      style={{
-                        backgroundColor: user.isBlocked ? '#4CAF50' : '#F44336',
-                        color: 'white',
-                        padding: '8px 16px',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                      }}
+                      onClick={() => handleBlockOrUnblock(user)}
+                      disabled={loadingState.specific[user.email]}
+                      className={`action-button ${user.isBlocked ? 'unblock' : 'block'}`}
                     >
-                      {loadingUsers[user.email]
+                      {loadingState.specific[user.email]
                         ? 'Procesando...'
                         : user.isBlocked
                         ? 'Desbloquear'
@@ -148,11 +206,7 @@ const BlockUsers = () => {
                   </td>
                   <td>
                     <button onClick={() => openModal(user)} className="details-button">
-                      <img
-                        src={userDetailsImage}
-                        alt="Detalles"
-                        className="details-image"
-                      />
+                      <img src={userDetailsImage} alt="Detalles" className="details-image" />
                     </button>
                   </td>
                 </tr>
@@ -162,6 +216,71 @@ const BlockUsers = () => {
 
           {isModalOpen && selectedUser && (
             <UserDetailsModal user={selectedUser} onClose={closeModal} />
+          )}
+
+          {isBlockModalOpen && (
+            <div className="blockUserModal">
+              <div className="blockUserModal-content">
+                <span
+                  className="blockUserModal-close"
+                  onClick={closeBlockModal}
+                >
+                  &times;
+                </span>
+                <h2>Bloquear a <strong>{selectedUser.username}</strong></h2>          
+                <div className="reasons-container">
+                  <h3>Selelccione una razón para el bloqueo</h3>
+                  <ul>
+                    {[
+                      'Spam',
+                      'Lenguaje ofensivo',
+                      'Acoso',
+                      'Publicación de contenido inapropiado',
+                      'Cuenta falsa',
+                      'Suplantación de identidad',
+                      'Incitación al odio',
+                      'Violación de normas de privacidad',
+                      'Actividad sospechosa',
+                      'Otros',
+                    ].map((reason, index) => (
+                      <li key={index}>
+                        <label>
+                          <input
+                            type="radio"
+                            name="reason"
+                            value={reason}
+                            checked={selectedReason === reason}
+                            onChange={() => setSelectedReason(reason)}
+                          />
+                          {reason}
+                        </label>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                  
+                <div className="days-selector">
+                  <h3>Días de bloqueo:</h3>
+                  <input
+                    type="range"
+                    min="2"
+                    max="14"
+                    value={blockDays}
+                    onChange={(e) => setBlockDays(Number(e.target.value))}
+                  />
+                  <span>{blockDays} días</span>
+                </div>
+                  
+                <div className="modal-actions">
+                  <button onClick={handleConfirmBlock} className="confirm-button">
+                    Confirmar
+                  </button>
+                  <button onClick={closeBlockModal} className="cancel-button">
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
         </>
       )}

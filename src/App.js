@@ -15,7 +15,7 @@ function App() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const token = await getToken();
+        const token = getToken();
 
         if (token) {
           setIsAuthenticated(true);

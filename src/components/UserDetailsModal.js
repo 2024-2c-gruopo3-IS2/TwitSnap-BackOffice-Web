@@ -1,33 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/UserDetailsModal.css';
 import { getProfileByUsername } from '../handlers/ProfileHandler';
+import { getBlockedUsers } from '../handlers/BlockUserHandler';
 
 const UserDetailsModal = ({ user, onClose }) => {
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [blockedUserDetails, setBlockedUserDetails] = useState(null);
 
     useEffect(() => {
-        const fetchProfile = async () => {
+        const fetchProfileAndBlockedUsers = async () => {
             try {
-                const result = await getProfileByUsername(user.username);
-                if (result.success) {
-                    setProfile(result.profile);
+                setLoading(true);
+
+                // Fetch profile
+                const profileResult = await getProfileByUsername(user.username);
+                if (profileResult.success) {
+                    setProfile(profileResult.profile);
                 } else {
-                    setError(result.message);
+                    setError(profileResult.message);
+                }
+
+                // Fetch blocked users
+                const blockedUsersResult = await getBlockedUsers();
+                if (blockedUsersResult.success) {
+                    const blockedUser = blockedUsersResult.data.find(
+                        (blocked) => blocked.email === user.email
+                    );
+                    if (blockedUser) {
+                        setBlockedUserDetails(blockedUser);
+                    }
+                } else {
+                    setError(blockedUsersResult.message);
                 }
             } catch (err) {
-                setError('Error al obtener el perfil');
+                setError('Error al obtener datos');
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchProfile();
-    }, [user.username]); // Dependencia en el username para volver a ejecutar si cambia
+        fetchProfileAndBlockedUsers();
+    }, [user.username, user.email]);
 
     if (loading) {
-        return <div></div>; // Mensaje de carga
+        return <div>Cargando...</div>; // Mensaje de carga
     }
 
     if (error) {
@@ -35,15 +53,24 @@ const UserDetailsModal = ({ user, onClose }) => {
     }
 
     return (
-        <div className="modal">
-            <div className="modal-content">
-                <span className="close" onClick={onClose}>
+        <div className="userDetailsModal">
+            <div className="userDetailsModal-content">
+                <span className="userDetailsModal-close" onClick={onClose}>
                     &times;
                 </span>
                 <h2>Detalles del Usuario</h2>
+                
+                {blockedUserDetails && (
+                    <div className="blockedUserDetails">
+                        <h3 className="blockedUserDetails-title">Usuario Bloqueado</h3>
+                        <p><strong>Razón:</strong> {blockedUserDetails.reason}</p>
+                        <p><strong>Días restantes:</strong> {blockedUserDetails.days}</p>
+                    </div>
+                )}
+                
                 <p><strong>Nombre de Usuario:</strong> {profile.username}</p>
                 <p><strong>Email:</strong> {profile.email}</p>
-                <p><strong>Estado:</strong> {user.isBlocked ? 'Bloqueado' : 'Activo'}</p>
+                <p><strong>Estado:</strong> {blockedUserDetails ? 'Bloqueado' : 'Activo'}</p>
                 <p><strong>Nombre:</strong> {profile.name} {profile.surname}</p>
                 <p><strong>Descripción:</strong> {profile.description}</p>
                 <p><strong>Fecha de Nacimiento:</strong> {profile.date_of_birth}</p>
