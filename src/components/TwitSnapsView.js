@@ -207,7 +207,7 @@ const TwitSnapsView = () => {
                 <p><strong>Email:</strong> {selectedSnap.email}</p>
                 <p><strong>Likes:</strong> {selectedSnap.likes}</p>
                 <p><strong>Fecha de Creación:</strong> {new Date(selectedSnap.created_at).toLocaleString()}</p>
-                <p><strong>Hastags:</strong> {selectedSnap.hashtags}</p>
+                <p><strong>Hashtags:</strong> {selectedSnap.hashtags}</p>
                 <p><strong>Estado:</strong> {selectedSnap.is_blocked ? 'Bloqueado' : 'Desbloqueado'}</p>
               </div>
             </TwitSnapModal>

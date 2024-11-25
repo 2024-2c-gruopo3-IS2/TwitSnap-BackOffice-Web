@@ -1,4 +1,4 @@
-.modal-overlay {
+.twitsnap-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -10,7 +10,7 @@
     align-items: center;
 }
 
-.modal-content {
+.twitsnap-modal-content {
     background: #1e1e1e; /* Fondo oscuro similar a X */
     color: white; /* Texto blanco */
     padding: 40px; /* Mayor padding para hacer el modal más grande */
@@ -21,7 +21,7 @@
     position: relative;
 }
 
-.modal-close {
+.twitsnap-modal-close {
     position: absolute;
     top: 10px;
     right: 10px; /* Ajustado para estar más cerca de la esquina */
@@ -33,17 +33,17 @@
     height: 25px; /* Establecer alto fijo */
 }
 
-.close-icon {
+.twitsnap-close-icon {
     width: 100%; /* Asegurar que la imagen ocupe todo el botón */
     height: 100%; /* Asegurar que la imagen ocupe todo el botón */
     transition: filter 0.3s; /* Transición suave para el hover */
 }
 
-.modal-close:hover .close-icon {
+.twitsnap-modal-close:hover .twitsnap-close-icon {
     filter: brightness(0.8); /* Oscurecer el icono al pasar el cursor */
 }
 
-.snap-details {
+.twitsnap-snap-details {
     border: 1px solid #3a3a3a; /* Bordes sutiles alrededor del contenido */
     padding: 20px; /* Relleno para espaciar el contenido */
     border-radius: 5px; /* Bordes redondeados */
@@ -51,10 +51,10 @@
     margin-top: 20px; /* Espacio por encima del contenido */
 }
 
-.snap-details p {
+.twitsnap-snap-details p {
     margin: 5px 0; /* Espaciado entre párrafos */
 }
 
-.snap-details strong {
+.twitsnap-snap-details strong {
     color: #0d8ae8; /* Color destacado para los títulos */
 }
