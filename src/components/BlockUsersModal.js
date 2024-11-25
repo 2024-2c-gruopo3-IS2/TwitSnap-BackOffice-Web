@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/BlockUsersModal.css'; // Asegúrate de crear este archivo para los estilos
-import { blockUser } from '../handlers/BlockUserHandler';
 
-const BlockUsersModal = ({ user, onClose }) => {
+const BlockUsersModal = ({ user, onClose, onConfirm }) => {
   const [selectedReason, setSelectedReason] = useState(null);
   const [blockDays, setBlockDays] = useState(2); // Valor inicial: 2 días
 
@@ -28,8 +27,9 @@ const BlockUsersModal = ({ user, onClose }) => {
       alert("Por favor, selecciona una razón para el bloqueo.");
       return;
     }
-    blockUser(user.email, selectedReason, blockDays);
-    onClose();
+
+    onConfirm({ reason: selectedReason, days: blockDays }); // Enviar datos al componente padre
+    onClose(); // Cerrar el modal
   };
 
   return (
@@ -39,7 +39,7 @@ const BlockUsersModal = ({ user, onClose }) => {
         <p>
           Estás a punto de bloquear a <strong>{user.username}</strong>. Por favor, selecciona una razón y elige la duración del bloqueo.
         </p>
-
+      
         <div className="reasons-container">
           <h3>Razones para el bloqueo:</h3>
           <ul>
@@ -59,7 +59,7 @@ const BlockUsersModal = ({ user, onClose }) => {
             ))}
           </ul>
         </div>
-
+          
         <div className="days-selector">
           <h3>Días de bloqueo:</h3>
           <input
@@ -71,7 +71,7 @@ const BlockUsersModal = ({ user, onClose }) => {
           />
           <span>{blockDays} días</span>
         </div>
-
+          
         <div className="modal-actions">
           <button onClick={handleSubmit} className="confirm-button">
             Confirmar
