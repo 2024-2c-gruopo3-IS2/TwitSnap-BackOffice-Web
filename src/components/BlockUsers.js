@@ -219,16 +219,17 @@ const BlockUsers = () => {
           )}
 
           {isBlockModalOpen && (
-            <div className="modal-overlay">
-              <div className="modal-container">
-                <h2>Bloquear Usuario</h2>
-                <p>
-                  Estás a punto de bloquear a <strong>{selectedUser.username}</strong>. Por favor,
-                  selecciona una razón y elige la duración del bloqueo.
-                </p>
-
+            <div className="blockUserModal">
+              <div className="blockUserModal-content">
+                <span
+                  className="blockUserModal-close"
+                  onClick={closeBlockModal}
+                >
+                  &times;
+                </span>
+                <h2>Bloquear a <strong>{selectedUser.username}</strong></h2>          
                 <div className="reasons-container">
-                  <h3>Razones para el bloqueo:</h3>
+                  <h3>Selelccione una razón para el bloqueo</h3>
                   <ul>
                     {[
                       'Spam',
@@ -257,7 +258,7 @@ const BlockUsers = () => {
                     ))}
                   </ul>
                 </div>
-
+                  
                 <div className="days-selector">
                   <h3>Días de bloqueo:</h3>
                   <input
@@ -269,7 +270,7 @@ const BlockUsers = () => {
                   />
                   <span>{blockDays} días</span>
                 </div>
-
+                  
                 <div className="modal-actions">
                   <button onClick={handleConfirmBlock} className="confirm-button">
                     Confirmar

@@ -94,100 +94,81 @@ tr:hover {
     opacity: 0.6;
   }
 
-  .modal-overlay {
+  .blockUserModal {
     display: flex;
     justify-content: center;
     align-items: center;
     position: fixed;
-    z-index: 1000; /* Asegúrate de que el modal esté encima de todo */
+    z-index: 1;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Fondo negro con opacidad */
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
   }
   
-  .modal-container {
-    background-color: #1a1a1a; /* Fondo gris oscuro */
-    padding: 24px;
-    border-radius: 15px;
+  .blockUserModal-content {
+    background-color: #2e2e2e;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 60px;
     width: 700px;
-    height: 700px;
-    color: #ffffff; /* Texto blanco */
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra sutil */
+    color: white;
   }
   
-  .modal-container h2 {
-    color: #ffffff;
-    margin-bottom: 16px;
-    border-bottom: 2px solid #0d8ae8; /* Línea decorativa en azul */
-    padding-bottom: 8px;
+  .blockUserModal-close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .blockUserModal-close:hover,
+  .blockUserModal-close:focus {
+    color: #f44336;
+    cursor: pointer;
   }
   
   .reasons-container h3,
   .days-selector h3 {
-    color: #ffffff;
-    margin-bottom: 8px;
-    text-align: left;
+    margin-bottom: 10px;
   }
   
   .reasons-container ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    text-align: left;
+    list-style-type: none;
+    padding-left: 0;
   }
   
   .reasons-container li {
     margin-bottom: 10px;
   }
   
-  .reasons-container input[type="radio"] {
-    margin-right: 8px;
-    accent-color: #0d8ae8; /* Azul para los botones de opción */
-  }
-  
-  .days-selector input[type="range"] {
+  .days-selector input {
     width: 100%;
-    margin: 10px 0;
-    accent-color: #0d8ae8; /* Azul para el control de rango */
-  }
-  
-  .days-selector span {
-    color: #0d8ae8;
   }
   
   .modal-actions {
-    margin-top: 20px;
     display: flex;
     justify-content: space-between;
+    margin-top: 20px;
   }
   
   .confirm-button,
   .cancel-button {
-    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
     border: none;
-    border-radius: 8px;
+    padding: 10px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .confirm-button {
-    background-color: #0d8ae8; /* Azul para el botón de confirmar */
-    color: #ffffff;
-  }
-  
-  .confirm-button:hover {
-    background-color: #005bb5; /* Azul más oscuro al pasar el mouse */
   }
   
   .cancel-button {
-    background-color: #f44336; /* Rojo para el botón de cancelar */
-    color: #ffffff;
+    background-color: #f44336;
   }
   
+  .confirm-button:hover,
   .cancel-button:hover {
-    background-color: #d32f2f; /* Rojo más oscuro al pasar el mouse */
+    opacity: 0.8;
   }
-  
