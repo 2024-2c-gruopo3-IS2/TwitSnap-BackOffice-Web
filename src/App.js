@@ -4,9 +4,11 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Home from './components/Home';
 import TwitSnapsView from './components/TwitSnapsView';
-import { getToken } from './handlers/AuthHandler'; // Asegúrate de implementar getToken en un archivo JS
-import Spinner from 'react-bootstrap/Spinner'; // Ejemplo: Usando Spinner de Bootstrap, puedes elegir otro componente de carga
+import { getToken } from './handlers/AuthHandler'; 
+import Spinner from 'react-bootstrap/Spinner'; 
 import VerificationView from './components/VerificationView';
+import Metrics from './components/Metrics';
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -49,6 +51,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/twitsnaps" element={<TwitSnapsView />} />
         <Route path="/verification" element={<VerificationView/>} />
+        <Route path="/metrics" element={<Metrics />} />
         {/* Si no está autenticado, redirigir al login */}
         {!isAuthenticated && <Route path="*" element={<Navigate to="/login" />} />}
       </Routes>
