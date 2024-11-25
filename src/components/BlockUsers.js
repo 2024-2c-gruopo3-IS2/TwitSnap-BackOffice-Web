@@ -30,10 +30,11 @@ const BlockUsers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
   const [selectedReason, setSelectedReason] = useState(null);
-  const [blockDays, setBlockDays] = useState(2); // Días por defecto
+  const [blockDays, setBlockDays] = useState(2);
+  const [errorMessage, setErrorMessage] = useState(null);
 
-  const isFetching = useRef(false); // Para evitar duplicar llamadas
-  const cacheRef = useRef(null); // Caché de usuarios
+  const isFetching = useRef(false); 
+  const cacheRef = useRef(null); 
 
   const setLoadingForUser = (email, isLoading) => {
     setLoadingState((prev) => ({
@@ -126,6 +127,7 @@ const BlockUsers = () => {
 
   const closeBlockModal = () => {
     setSelectedUser(null);
+    setErrorMessage(null);
     setIsBlockModalOpen(false);
   };
 
@@ -147,7 +149,7 @@ const BlockUsers = () => {
 
   const handleConfirmBlock = async () => {
     if (!selectedReason) {
-      alert('Por favor, selecciona una razón para el bloqueo.');
+      setErrorMessage('Por favor, selecciona una razón para el bloqueo.');
       return;
     }
 
@@ -229,9 +231,10 @@ const BlockUsers = () => {
                 >
                   &times;
                 </span>
-                <h2>Bloquear a <strong>{selectedUser.username}</strong></h2>          
+                <h2>Bloquear a <strong>{selectedUser.username}</strong></h2>     
                 <div className="reasons-container">
                   <h3>Selelccione una razón para el bloqueo</h3>
+                  {errorMessage && <p className="error-message">{errorMessage}</p>}     
                   <ul>
                     {[
                       'Spam',

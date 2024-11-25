@@ -58,7 +58,7 @@ const UserDetailsModal = ({ user, onClose }) => {
                 <span className="userDetailsModal-close" onClick={onClose}>
                     &times;
                 </span>
-                <h2>Detalles del Usuario</h2>
+                <h2>Detalles del Usuario: {profile.username}</h2>
                 
                 {blockedUserDetails && (
                     <div className="blockedUserDetails">
