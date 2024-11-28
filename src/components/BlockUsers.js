@@ -62,8 +62,15 @@ const BlockUsers = () => {
     try {
       const resultUsers = await getAllUsers();
       const blockedUsers = await getBlockedUsers();
-      const blockedEmails = blockedUsers.data.map((user) => user.email);
 
+      console.log('[BLOCKED USERS]', blockedUsers); // Imprimir usuarios obtenidos
+
+      if (!blockedUsers.success) {
+        throw new Error('Error al obtener los usuarios bloqueados');
+      }
+
+      const blockedEmails = blockedUsers.data.map((user) => user.email);
+      
       const users = await Promise.all(
         resultUsers.data.map(async (user) => {
           const profile = await getProfileByUsername(user);
