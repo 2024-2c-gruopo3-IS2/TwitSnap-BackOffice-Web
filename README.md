@@ -1,4 +1,4 @@
-# 📘 Manual de Usuario - TwitSnap BackOffice 
+# Manual de Usuario - TwitSnap BackOffice 
 
 <div align="center">
     <img src="src/assets/images/logo_con_fondo.png" alt="Logo con fondo">
@@ -225,28 +225,26 @@ Se puede filtrar la lista de TwitSnaps por autor, mensaje, fecha de creación y 
 ### 📊 Métricas
 Seleccionando la opción **"Métricas"** en la barra lateral, se mostrará una lista de las métricas de la plataforma mobile.
 
-<div align="center">
-    <img src="src/assets/doc_images/Metrics/Metrics1.png" alt="Métricas de usuarios">
-</div>
-
 Hay métricas para los usuarios registrados mostrando cantidad, tiempo promedio y tasa de éxito.
 
 Lo mismo para los inicios de sesión.
 
 <div align="center">
-    <img src="src/assets/doc_images/Metrics/Metrics2.png" alt="Métricas de inicios de sesión">
+    <img src="src/assets/doc_images/Metrics/Metrics1.png" alt="Métricas de usuarios">
 </div>
+
 
 También hay métricas para los usuarios bloqueados mostrando el correo electrónico, la razón del bloqueo y la cantidad de días.
 
 <div align="center">
-    <img src="src/assets/doc_images/Metrics/Metrics3.png" alt="Métricas de usuarios bloqueados">
+    <img src="src/assets/doc_images/Metrics/Metrics2.png" alt="Métricas de inicios de sesión">
 </div>
+
 
 Finalmente se muestran las métricas de los recuperos de contraseña. Se muestra la cantidad de recuperaciones exitosas, el tiempo promedio y la tasa de éxito.
 
 También se muestran los usuarios por zona geográfica. Se muestra la cantidad de usuarios por país.
 
 <div align="center">
-    <img src="src/assets/doc_images/Metrics/Metrics4.png" alt="Métricas geográficas">
+    <img src="src/assets/doc_images/Metrics/Metrics3.png" alt="Métricas de usuarios bloqueados">
 </div>
