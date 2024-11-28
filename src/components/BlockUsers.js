@@ -65,7 +65,7 @@ const BlockUsers = () => {
 
       console.log('[BLOCKED USERS]', blockedUsers); // Imprimir usuarios obtenidos
 
-      if (!blockedUsers.success) {
+      if (!blockedUsers.data) {
         throw new Error('Error al obtener los usuarios bloqueados');
       }
 

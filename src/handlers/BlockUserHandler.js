@@ -71,7 +71,7 @@ export const getBlockedUsers = async () => {
         }
 
         const responseData = await response.json();
-        return { success: true, data: responseData.users };
+        return { success: true, data: responseData.users || [] };
     } catch (error) {
         return { success: false, message: error.message };
     }
