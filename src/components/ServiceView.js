@@ -116,7 +116,7 @@ const ServiceView = () => {
         const start = new Date(startDate).setHours(0, 0, 0, 0);
         const end = new Date(endDate).setHours(23, 59, 59, 999);
 
-        return serviceDate >= start && serviceDate <= end;
+        return serviceDate > start && serviceDate <= end;
       }
 
       if (filterType === 'status') {
