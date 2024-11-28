@@ -248,3 +248,5 @@ También se muestran los usuarios por zona geográfica. Se muestra la cantidad d
 <div align="center">
     <img src="src/assets/doc_images/Metrics/Metrics3.png" alt="Métricas de usuarios bloqueados">
 </div>
+
+
